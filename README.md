@@ -123,6 +123,19 @@ SQLALCHEMY_DATABASE_URI = 'sqlite:////tmp/tracks.db'  # URI for database that co
 
 ```
 
+The configuration currently says to save the database to a temporary location as it is just for testing. However, if you are not on your local machine, you may have issues with this location and should change it to a location within your home directory, where you have full permissions. To change it to saving in the data directory within this repository, run the Python code from this directory and change the `config.py` to say:
+
+```python
+SQLALCHEMY_DATABASE_URI = 'sqlite:///../data/tracksB.db'
+```
+
+The three `///` denote that it is a relative path to where the code is being run (which is from `src/add_songs.py`). 
+
+You can also define the absolute path with four `////`:
+
+```python
+SQLALCHEMY_DATABASE_URI = 'sqlite:////Users/chloemawer/repos/MSIA423-example-project-repo-2019/data/tracks.db'
+```
 
 ### 3. Initialize the database 
 
