@@ -28,6 +28,8 @@
 2. There is a 1% increase in the customer volume in 6 months from the time this feature goes live.
   
 ## Backlog 
+**Theme:** Build a currency exchange forecast application for the BofE customers
+
 ![image](https://github.com/surabhi-seth/MSiA423-XchangeRatePredictor/blob/master/Backlog.png)
 
 ## Repo structure 
