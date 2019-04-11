@@ -3,6 +3,7 @@
 <!-- toc -->
 
 - [Project Charter](#project-charter)
+- [Backlog](#backlog)
 - [Repo structure](#repo-structure)
 - [Documentation](#documentation)
 - [Running the application](#running-the-application)
@@ -18,14 +19,16 @@
 
 ## Project Charter 
 
-**Vision**: To enable animals everywhere to enjoy music just for them. 
+**Vision**: Increase the customer volume using the Bank of Etas (BofE) foreign currency exchange service by providing a better overall service experience and value adding features. 
 
-**Mission**: Enable users to add songs that they like and produce new song recommendations based on their entries.
+**Mission**: Drive a better customer experience by providing an exchange rate predictor that gives a rate forecast for the next 7 days for the 3 top exchange currency pairs.
 
-**Success criteria**: Users play 80% of recommended songs more than once. 
-
-
-_Note_: Project charters should actually be more detailed than this! But this is where the charter belongs.  
+**Success criteria**: 
+1. The Mean Absolute Percentage Error (MAPE) for the rate predictions is less that 15%.
+2. There is a 1% increase in the customer volume in 6 months from the time this feature goes live.
+  
+## Backlog 
+![image](https://github.com/surabhi-seth/MSiA423-XchangeRatePredictor/blob/master/Backlog.png)
 
 ## Repo structure 
 
