@@ -27,8 +27,18 @@
 1. The Mean Absolute Percentage Error (MAPE) for the rate predictions is less that 15%.
 2. There is a 1% increase in the customer volume in 6 months from the time this feature goes live.
   
-## Backlog 
+## Backlog & Icebox
 **Theme:** Build a currency exchange forecast application for the BofE customers
+
+**Epics:**
+1. Get historic exchange rate data.
+2. Predictive Model Evaluation
+3. Forecast rates
+4. Expose the rate forecasts to the end user
+5. Test deployment
+6. Production deployment
+
+**Stories:**
 
 ![image](https://github.com/surabhi-seth/MSiA423-XchangeRatePredictor/blob/master/Backlog.png)
 
