@@ -19,9 +19,9 @@
 
 ## Project Charter 
 
-**Vision**: Increase the customer volume using the Bank of Etas (BofE) foreign currency exchange service by providing a better overall service experience and value adding features. 
+**Vision**: Increase the customer volume using the Bank of Etas (BofE) foreign currency exchange service through an exchange rate predictor which provides a unique value add to the customers and a better overall service experience. 
 
-**Mission**: Drive a better customer experience by providing an exchange rate predictor that gives a rate forecast for the next 7 days for the 3 top exchange currency pairs.
+**Mission**: Build an exchange rate predictor that provides a rate forecast to the BofE customers for the next 7 days and for the 3 top exchange currency pairs.
 
 **Success criteria**: 
 1. The Mean Absolute Percentage Error (MAPE) for the rate predictions is less that 15%.
@@ -37,6 +37,7 @@
 4. Expose the rate forecasts to the end user
 5. Test deployment
 6. Production deployment
+7. Tech Tasks
 
 **Stories:**
 
