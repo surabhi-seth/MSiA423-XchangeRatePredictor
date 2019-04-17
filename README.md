@@ -123,7 +123,9 @@ SQLALCHEMY_DATABASE_URI = 'sqlite:////tmp/tracks.db'  # URI for database that co
 
 ```
 
-The configuration currently says to save the database to a temporary location as it is just for testing. However, if you are not on your local machine, you may have issues with this location and should change it to a location within your home directory, where you have full permissions. To change it to saving in the data directory within this repository, run the Python code from this directory and change the `config.py` to say:
+* You will need to update the `PORT` configuration to your assigned port when deploying on the MSiA server (reach out to the instructors if you have not been assigned one)
+
+* The configuration currently says to save the database to a temporary location as it is just for testing. However, if you are not on your local machine, you may have issues with this location and should change it to a location within your home directory, where you have full permissions. To change it to saving in the data directory within this repository, run the Python code from this directory and change the `config.py` to say:
 
 ```python
 SQLALCHEMY_DATABASE_URI = 'sqlite:///../data/tracksB.db'
@@ -156,7 +158,18 @@ To add additional songs:
 
 ### 5. Interact with the application 
 
-Go to [http://127.0.0.1:3000/]( http://127.0.0.1:3000/) to interact with the current version of hte app. 
+a. On your computer - go to [http://127.0.0.1:3000/](http://127.0.0.1:3000/) to interact with the current version of the app. 
+
+b. On the MSiA server:  when deploying the web app on the MSiA server you will need to run the following command **on your computer** (not on the server) before you can see the web app (you might be prompted for you NUIT password):
+
+```bash
+ssh -L $USER_PORT:127.0.0.1:$USER_PORT $NUIT_USER@msia423.analytics.northwestern.edu
+```
+
+* Replace the variable `$USER_PORT` with your assigned MSiA server port (reach out to the instructors if you have not been assigned one) and
+`$NUIT_USER` with your NUIT username. An example: `ssh -L 3000:127.0.0.1:9000 fai3458@msia423.analytics.northwestern.edu` (We use the same port number for both the remote and local ports for convenience)
+
+* Go to `http:127.0.0.1:$USER_PORT` to interact with the app. 
 
 ## Testing 
 
