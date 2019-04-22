@@ -20,6 +20,8 @@ logger = logging.getLogger("run-penny-lane")
 
 from src.add_songs import create_db, add_track
 
+import src.load_data as load
+
 
 if __name__ == '__main__':
 
@@ -39,6 +41,11 @@ if __name__ == '__main__':
     sb_ingest.add_argument("--title", default="Minor Cause", help="Title of song to be added")
     sb_ingest.add_argument("--album", default="Dusk to Dawn", help="Album of song being added")
     sb_ingest.set_defaults(func=add_track)
+
+    sb_load = subparsers.add_parser("load_data", description="Load data into a dataframe")
+    sb_load.add_argument('--config', help='path to yaml file with configurations')
+    sb_load.add_argument('--save', default=None, help='Path to where the dataset should be saved to (optional')
+    sb_load.set_defaults(func=load.run)
 
     args = parser.parse_args()
     args.func(args)

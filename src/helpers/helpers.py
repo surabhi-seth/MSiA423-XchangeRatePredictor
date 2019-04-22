@@ -5,12 +5,12 @@ class Timer:
     """Times the code within the with statement and logs the elapsed time when it closes.
 
            Args:
-               function (string): Name of function being timed
+               function_name(string): Name of function being timed
                logger (obj:`logging.logger`): Logger to have elapsed time logged to
    """
-    def __init__(self, function, logger):
+    def __init__(self, function_name, logger):
         self.logger = logger
-        self.function = function
+        self.function = function_name
 
     def __enter__(self):
         self.start = datetime.datetime.now()
