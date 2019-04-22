@@ -55,7 +55,8 @@ def get_file_names(top_dir):
     if top_dir.startswith("s3://"):
         list_of_files = get_s3_file_names(top_dir)
     else:
-        list_of_files = glob.glob(top_dir+'/**/*.', recursive=True)
+        top_dir = top_dir[:-1] if top_dir[-1] == "/" else top_dir
+        list_of_files = glob.glob(top_dir+'/*.csv', recursive=True)
 
     return list_of_files
 
