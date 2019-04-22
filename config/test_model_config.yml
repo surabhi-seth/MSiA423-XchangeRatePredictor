@@ -1,0 +1,5 @@
+load_data:
+  how: load_csvs
+  load_csvs:
+    directory: data/sample/music
+    n_cores: -1
