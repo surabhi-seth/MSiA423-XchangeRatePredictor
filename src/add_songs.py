@@ -1,8 +1,37 @@
 from app import db
-from app.models import Track
+# from app.models import Track
 import argparse
 import logging.config
+import yaml
+import os
+
+
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import Column, Integer, String, MetaData
+from sqlalchemy.orm import sessionmaker
+
+from src.helpers.helpers import create_connection
+
+
 logger = logging.getLogger(__name__)
+
+Base = declarative_base()
+
+
+class Track(Base):
+    """Create a data model for the database to be set up for capturing songs
+
+    """
+
+    __tablename__ = 'tracks'
+
+    id = Column(Integer, primary_key=True)
+    title = Column(String(100), unique=False, nullable=False)
+    artist = Column(String(100), unique=False, nullable=False)
+    album = Column(String(100), unique=False, nullable=True)
+
+    def __repr__(self):
+        return '<Track %r>' % self.title
 
 
 def create_db(args):
@@ -15,12 +44,18 @@ def create_db(args):
 
     """
 
-    db.create_all()
+    engine = create_connection(engine_string=args.engine_string)
+
+    Base.metadata.create_all(engine)
+
+    Session = sessionmaker(bind=engine)
+    session = Session()
 
     track = Track(artist=args.artist, album=args.album, title=args.title)
-    db.session.add(track)
-    db.session.commit()
+    session.add(track)
+    session.commit()
     logger.info("Database created with song added: %s by %s from album, %s ", args.title, args.artist, args.album)
+    session.close()
 
 
 def add_track(args):
@@ -33,9 +68,14 @@ def add_track(args):
 
     """
 
+    engine = create_connection(engine_string=args.engine_string)
+
+    Session = sessionmaker(bind=engine)
+    session = Session()
+
     track = Track(artist=args.artist, album=args.album, title=args.title)
-    db.session.add(track)
-    db.session.commit()
+    session.add(track)
+    session.commit()
     logger.info("%s by %s from album, %s, added to database", args.title, args.artist, args.album)
 
 
@@ -50,6 +90,8 @@ if __name__ == '__main__':
     sb_create.add_argument("--artist", default="Britney Spears", help="Artist of song to be added")
     sb_create.add_argument("--title", default="Radar", help="Title of song to be added")
     sb_create.add_argument("--album", default="Circus", help="Album of song being added.")
+    sb_create.add_argument("--engine_string", default='sqlite:///../data/tracksB.db',
+                           help="SQLAlchemy connection URI for database")
     sb_create.set_defaults(func=create_db)
 
     # Sub-parser for ingesting new data
@@ -57,6 +99,8 @@ if __name__ == '__main__':
     sb_ingest.add_argument("--artist", default="Emancipator", help="Artist of song to be added")
     sb_ingest.add_argument("--title", default="Minor Cause", help="Title of song to be added")
     sb_ingest.add_argument("--album", default="Dusk to Dawn", help="Album of song being added")
+    sb_ingest.add_argument("--engine_string", default='sqlite:///../data/tracksB.db',
+                           help="SQLAlchemy connection URI for database")
     sb_ingest.set_defaults(func=add_track)
 
     args = parser.parse_args()

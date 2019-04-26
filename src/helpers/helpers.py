@@ -1,4 +1,6 @@
 import datetime
+import sqlalchemy
+import yaml
 
 
 class Timer:
@@ -49,3 +51,40 @@ def format_sql(sql, replace_sqlvar=None, replace_var=None, python=True):
         sql = sql.replace("%", "%%")
 
     return sql
+
+
+def ifin(param, dictionary, alt=None):
+
+    assert type(dictionary) == dict
+    if param in dictionary:
+        return dictionary[param]
+    else:
+        return alt
+
+
+def create_connection(host='127.0.0.1', database="", sqltype="mysql+pymysql", port=3308,
+                      user_env="amazonRDS_user", password_env="amazonRDS_pw",
+                      username=None, password=None, dbconfig=None, engine_string=None):
+
+    if engine_string is None:
+        if dbconfig is not None:
+            with open(dbconfig, "r") as f:
+                db = yaml.load(f)
+
+            host = db["host"]
+            database = ifin("dbname", db, "")
+            sqltype = ifin("type", db, sqltype)
+            port = db["port"]
+            user_env = db["user_env"]
+            password_env = db["password_env"]
+
+        username = os.environ.get(user_env) if username is None else username
+        password = os.environ.get(password_env) if password is None else password
+
+        engine_string = "{sqltype}://{username}:{password}@{host}:{port}/{database}"
+        engine_string = engine_string.format(sqltype=sqltype, username=username,
+                                             password=password, host=host, port=port, database=database)
+
+    conn = sqlalchemy.create_engine(engine_string)
+
+    return conn

@@ -113,7 +113,7 @@ pip install -r requirements.txt
 
 ### 2. Configure Flask app 
 
-`config.py` holds the configurations for the Flask app. It includes the following configurations:
+`app/config.py` holds the configurations for the Flask app. It includes the following configurations:
 
 ```python
 DEBUG = True  # Keep True for debugging, change to False when moving to production 
@@ -138,7 +138,7 @@ To add additional songs:
 ### 4. Run the application 
  
  ```bash
- python app.py 
+ python run.py app
  ```
 
 ### 5. Interact with the application 

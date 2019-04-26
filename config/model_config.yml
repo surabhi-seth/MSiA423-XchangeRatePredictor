@@ -2,4 +2,4 @@ load_data:
   how: load_csvs
   load_csvs:
     directory: s3://msia423/music
-    n_cores: -1
+    n_cores: 1

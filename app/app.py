@@ -1,12 +1,22 @@
 from flask import render_template, request, redirect, url_for
 import logging.config
-from app import db, app
 from app.models import Track
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+
+# Initialize the Flask application
+app = Flask(__name__)
+
+# Configure flask app from config.py
+app.config.from_object('config')
 
 # Define LOGGING_CONFIG in config.py - path to config file for setting up the logger (e.g. config/logging/local.conf)
 logging.config.fileConfig(app.config["LOGGING_CONFIG"])
 logger = logging.getLogger("penny-lane")
 logger.debug('Test log')
+
+# Initialize the database
+db = SQLAlchemy(app)
 
 
 @app.route('/')
@@ -47,5 +57,3 @@ def add_entry():
         return render_template('error.html')
 
 
-if __name__ == "__main__":
-    app.run(debug=app.config["DEBUG"], port=app.config["PORT"], host=app.config["HOST"])
