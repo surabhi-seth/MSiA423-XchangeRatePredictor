@@ -1,6 +1,6 @@
 from flask import render_template, request, redirect, url_for
 import logging.config
-from app.models import Track
+from app.models import Tracks
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
@@ -29,14 +29,16 @@ def index():
     Returns: rendered html template
 
     """
-
-    try:
-        tracks = Track.query.all()
-        logger.debug("Index page accessed")
-        return render_template('index.html', tracks=tracks)
-    except:
-        logger.warning("Not able to display tracks, error page returned")
-        return render_template('error.html')
+    tracks = Tracks.query.all()
+    logger.debug("Index page accessed")
+    return render_template('index.html', tracks=tracks)
+    # try:
+    #     tracks = Track.query.all()
+    #     logger.debug("Index page accessed")
+    #     return render_template('index.html', tracks=tracks)
+    # except:
+    #     logger.warning("Not able to display tracks, error page returned")
+    #     return render_template('error.html')
 
 
 @app.route('/add', methods=['POST'])
