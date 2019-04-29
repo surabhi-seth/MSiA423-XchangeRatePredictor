@@ -1,7 +1,7 @@
 import datetime
 import sqlalchemy
 import yaml
-
+from sqlalchemy.orm import sessionmaker
 
 class Timer:
     """Times the code within the with statement and logs the elapsed time when it closes.
@@ -88,3 +88,26 @@ def create_connection(host='127.0.0.1', database="", sqltype="mysql+pymysql", po
     conn = sqlalchemy.create_engine(engine_string)
 
     return conn
+
+
+def get_session(engine=None, engine_string=None):
+    """
+
+    Args:
+        engine_string: SQLAlchemy connection string in the form of:
+
+            "{sqltype}://{username}:{password}@{host}:{port}/{database}"
+
+    Returns:
+        SQLAlchemy session
+    """
+
+    if engine is None and engine_string is None:
+        return ValueError("`engine` or `engine_string` must be provided")
+    elif engine is None:
+        engine = create_connection(engine_string=engine_string)
+
+    Session = sessionmaker(bind=engine)
+    session = Session()
+
+    return session

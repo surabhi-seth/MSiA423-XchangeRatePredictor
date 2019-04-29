@@ -31,7 +31,7 @@ def index():
     """
 
     try:
-        tracks = Tracks.query.all()
+        tracks = db.session.query(Tracks).limit(app.config["MAX_ROWS_SHOW"]).all()
         logger.debug("Index page accessed")
         return render_template('index.html', tracks=tracks)
     except:

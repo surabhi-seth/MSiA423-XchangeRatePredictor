@@ -10,7 +10,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, MetaData
 from sqlalchemy.orm import sessionmaker
 
-from src.helpers.helpers import create_connection
+from src.helpers.helpers import create_connection, get_session
 
 
 logger = logging.getLogger(__name__)
@@ -48,8 +48,7 @@ def create_db(args):
 
     Base.metadata.create_all(engine)
 
-    Session = sessionmaker(bind=engine)
-    session = Session()
+    session = get_session(engine=engine)
 
     track = Track(artist=args.artist, album=args.album, title=args.title)
     session.add(track)
@@ -68,10 +67,7 @@ def add_track(args):
 
     """
 
-    engine = create_connection(engine_string=args.engine_string)
-
-    Session = sessionmaker(bind=engine)
-    session = Session()
+    session = get_session(engine_string=args.engine_string)
 
     track = Track(artist=args.artist, album=args.album, title=args.title)
     session.add(track)
