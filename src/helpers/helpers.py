@@ -53,6 +53,18 @@ def format_sql(sql, replace_sqlvar=None, replace_var=None, python=True):
     return sql
 
 
+def load_sql(path_to_sql, load_comments=False, replace_sqlvar=None, replace_var=None, python=True):
+    sql = ""
+    with open(path_to_sql, "r") as f:
+        for line in f.readlines():
+            if not load_comments and not line.startswith("--"):
+                sql += line
+
+    sql = format_sql(replace_sqlvar=replace_sqlvar, replace_var=replace_var, python=python)
+
+    return sql
+
+
 def ifin(param, dictionary, alt=None):
 
     assert type(dictionary) == dict
@@ -111,3 +123,11 @@ def get_session(engine=None, engine_string=None):
     session = Session()
 
     return session
+
+
+def fillin_kwargs(keywords, kwargs):
+    keywords = [keywords] if type(keywords) != list else keywords
+    for keyword in keywords:
+        if keyword not in kwargs:
+            kwargs[keyword] = {}
+    return kwargs

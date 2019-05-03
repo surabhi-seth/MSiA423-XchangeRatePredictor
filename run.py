@@ -3,15 +3,7 @@
 This module combines the argparsing of each module within src/ and enables the execution of the corresponding scripts
 so that all module imports can be absolute with respect to the main project directory.
 
-Current commands enabled:
-
-To create a database for Tracks with an initial song:
-
-    `python run.py create --artist="Britney Spears" --title="Radar" --album="Circus"`
-
-To add a song to an already created database:
-
-    `python run.py ingest --artist="Britney Spears" --title="Radar" --album="Circus"`
+To understand different arguments, run `python run.py --help`
 """
 import argparse
 import logging.config
@@ -19,8 +11,11 @@ logging.config.fileConfig("config/logging/local.conf")
 logger = logging.getLogger("run-penny-lane")
 
 from src.add_songs import create_db, add_track
+from src.load_data import run_loading
+from src.generate_features import run_features
+from src.train_model import run_training
+from src.score_model import run_scoring
 from app.app import app
-import src.load_data as load
 
 
 def run_app(args):
@@ -52,8 +47,29 @@ if __name__ == '__main__':
 
     sb_load = subparsers.add_parser("load_data", description="Load data into a dataframe")
     sb_load.add_argument('--config', help='path to yaml file with configurations')
-    sb_load.add_argument('--save', default=None, help='Path to where the dataset should be saved to (optional')
-    sb_load.set_defaults(func=load.run)
+    sb_load.add_argument('--output', default=None, help='Path to where the dataset should be saved to (optional')
+    sb_load.set_defaults(func=run_loading)
+
+    # FEATURE subparser
+    sb_features = subparsers.add_parser("generate_features", description="Generate features")
+    sb_features.add_argument('--config', help='path to yaml file with configurations')
+    sb_features.add_argument('--input', default=None, help="Path to CSV for input to model scoreing")
+    sb_features.add_argument('--output', default=None, help='Path to where the dataset should be saved to (optional')
+    sb_features.set_defaults(func=run_features)
+
+    # TRAIN subparser
+    sb_train = subparsers.add_parser("train_model", description="Train model")
+    sb_train.add_argument('--config', help='path to yaml file with configurations')
+    sb_train.add_argument('--input', default=None, help="Path to CSV for input to model training")
+    sb_train.add_argument('--output', default=None, help='Path to where the dataset should be saved to (optional')
+    sb_train.set_defaults(func=run_training)
+
+    # SCORE subparser
+    sb_score = subparsers.add_parser("score_model", description="Score model")
+    sb_score.add_argument('--config', help='path to yaml file with configurations')
+    sb_score.add_argument('--input', default=None, help="Path to CSV for input to model scoring")
+    sb_score.add_argument('--output', default=None, help='Path to where the dataset should be saved to (optional')
+    sb_score.set_defaults(func=run_scoring)
 
     sb_run = subparsers.add_parser("app", description="Run Flask app")
     sb_run.set_defaults(func=run_app)

@@ -1,4 +1,4 @@
-from app import db
+# from app import db
 # from app.models import Track
 import argparse
 import logging.config
@@ -14,6 +14,7 @@ from src.helpers.helpers import create_connection, get_session
 
 
 logger = logging.getLogger(__name__)
+logger.setLevel("INFO")
 
 Base = declarative_base()
 
@@ -86,7 +87,7 @@ if __name__ == '__main__':
     sb_create.add_argument("--artist", default="Britney Spears", help="Artist of song to be added")
     sb_create.add_argument("--title", default="Radar", help="Title of song to be added")
     sb_create.add_argument("--album", default="Circus", help="Album of song being added.")
-    sb_create.add_argument("--engine_string", default='sqlite:///../data/tracksB.db',
+    sb_create.add_argument("--engine_string", default='sqlite:///../data/tracks.db',
                            help="SQLAlchemy connection URI for database")
     sb_create.set_defaults(func=create_db)
 
