@@ -2,6 +2,10 @@ import datetime
 import sqlalchemy
 import yaml
 from sqlalchemy.orm import sessionmaker
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 class Timer:
     """Times the code within the with statement and logs the elapsed time when it closes.
@@ -127,6 +131,8 @@ def get_session(engine=None, engine_string=None):
 
 def fillin_kwargs(keywords, kwargs):
     keywords = [keywords] if type(keywords) != list else keywords
+
+    logger.debug("Original keywords in kwargs: %s", ",".join(kwargs.keys()))
     for keyword in keywords:
         if keyword not in kwargs:
             kwargs[keyword] = {}

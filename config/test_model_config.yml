@@ -28,11 +28,12 @@ generate_features:
     quartiles: [4, 2]
   drop_na:
     columns: song.hotttnesss
+  choose_features:
+    features_to_use: [key, beats_start, bars_start, duration, terms, loudness]
+    target: song.hotttnesss
   save_features: test/model/test/music_processed.csv
 train_model:
   method: linear_regression
-  choose_features:
-    features_to_use: [key, beats_start, bars_start, duration, terms, loudness]
   get_target:
     target: song.hotttnesss
   split_data:

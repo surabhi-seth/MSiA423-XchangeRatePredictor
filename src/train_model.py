@@ -115,18 +115,19 @@ def train_model(df, method=None, save_tmo=None, add_evalset=True, **kwargs):
 
     assert method in methods.keys()  # `methods` defined at top of file, possible methods for training
 
+    # If "get_target" in the config file under "train_model", will get the target data for supervised learning
+    # Otherwise y = None and the model must be unsupervised.
+    if "get_target" in kwargs:
+        y = get_target(df, **kwargs["get_target"])
+        df = df.drop(labels=[kwargs["get_target"]["target"]], axis=1)
+    else:
+        y = None
+
     # If "choose_features" in the config file under "train_model", will reduce the feature set to those listed
     if "choose_features" in kwargs:
         X = choose_features(df, **kwargs["choose_features"])
     else:
         X = df
-
-    # If "get_target" in the config file under "train_model", will get the target data for supervised learning
-    # Otherwise y = None and the model must be unsupervised.
-    if "get_target" in kwargs:
-        y = get_target(df, **kwargs["get_target"])
-    else:
-        y = None
 
     # If "fit", "predict", and other configuration options listed at the top of the file under
     # "train_model_kwargs" are not in the "train_data" configurations, creates empty dictionaries

@@ -9,12 +9,26 @@ import sqlalchemy
 import pandas as pd
 
 from src.load_data import load_data, load_column_as_list
+from src.helpers.helpers import fillin_kwargs
 
 logger = logging.getLogger(__name__)
 
 
-def choose_features(df, features_to_use=None, save_path=None, target=None, **kwargs):
+def choose_features(df, features_to_use=None, target=None, save_path=None, **kwargs):
+    """Reduces the dataset to the features_to_use. Will keep the target if provided.
 
+    Args:
+        df (:py:class:`pandas.DataFrame`): DataFrame containing the features
+        features_to_use (:obj:`list`): List of columnms to extract from the dataset to be features
+        target (str, optional): If given, will include the target column in the output dataset as well.
+        save_path (str, optional): If given, will save the feature set (and target, if applicable) to the given path.
+        **kwargs:
+
+    Returns:
+        X (:py:class:`pandas.DataFrame`): DataFrame containing extracted features (and target, it applicable)
+    """
+
+    logger.debug("Choosing features")
     if features_to_use is not None:
         features = []
         dropped_columns = []
@@ -27,9 +41,10 @@ def choose_features(df, features_to_use=None, save_path=None, target=None, **kwa
 
         if len(dropped_columns) > 0:
             logger.info("The following columns were not used as features: %s", ",".join(dropped_columns))
-
+        logger.debug(features)
         X = df[features]
     else:
+        logger.debug("features_to_use is None, df being returned")
         X = df
 
     if save_path is not None:
@@ -146,7 +161,7 @@ def generate_features(df, save_features=None, **kwargs):
             logging.debug("Generating feature via %s", command)
             df = eval(command)
 
-    choose_features_kwargs = {} if "choose_features" not in kwargs else kwargs["choose_features"]
+    choose_features_kwargs = fillin_kwargs("choose_features", kwargs)["choose_features"]
     df = choose_features(df, **choose_features_kwargs)
 
     if save_features is not None:
@@ -156,6 +171,7 @@ def generate_features(df, save_features=None, **kwargs):
 
 
 def run_features(args):
+    """Orchestrates the generating of features from commandline arguments."""
     with open(args.config, "r") as f:
         config = yaml.load(f)
 
@@ -171,6 +187,7 @@ def run_features(args):
 
     if args.output is not None:
         df.to_csv(args.output)
+        logger.info("Features saved to %s", args.output)
 
     return df
 
