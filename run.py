@@ -35,7 +35,7 @@ if __name__ == '__main__':
     sb_create.add_argument("--artist", default="Britney Spears", help="Artist of song to be added")
     sb_create.add_argument("--title", default="Radar", help="Title of song to be added")
     sb_create.add_argument("--album", default="Circus", help="Album of song being added.")
-    sb_create.add_argument("--engine_string", default='sqlite:///data/tracksB.db',
+    sb_create.add_argument("--engine_string", default='sqlite:///data/tracks.db',
                            help="SQLAlchemy connection URI for database")
     sb_create.set_defaults(func=create_db)
 
@@ -44,7 +44,7 @@ if __name__ == '__main__':
     sb_ingest.add_argument("--artist", default="Emancipator", help="Artist of song to be added")
     sb_ingest.add_argument("--title", default="Minor Cause", help="Title of song to be added")
     sb_ingest.add_argument("--album", default="Dusk to Dawn", help="Album of song being added")
-    sb_ingest.add_argument("--engine_string", default='sqlite:///data/tracksB.db',
+    sb_ingest.add_argument("--engine_string", default='sqlite:///data/tracks.db',
                            help="SQLAlchemy connection URI for database")
     sb_ingest.set_defaults(func=add_track)
 

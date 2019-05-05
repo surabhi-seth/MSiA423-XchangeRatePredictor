@@ -1,7 +1,8 @@
 from flask import render_template, request, redirect, url_for
 import logging.config
-from app.models import Tracks
+# from app.models import Tracks
 from flask import Flask
+from src.add_songs import Tracks
 from flask_sqlalchemy import SQLAlchemy
 
 # Initialize the Flask application
@@ -10,7 +11,8 @@ app = Flask(__name__)
 # Configure flask app from config.py
 app.config.from_object('config')
 
-# Define LOGGING_CONFIG in config.py - path to config file for setting up the logger (e.g. config/logging/local.conf)
+# Define LOGGING_CONFIG in config.py - path to config file for setting
+# up the logger (e.g. config/logging/local.conf)
 logging.config.fileConfig(app.config["LOGGING_CONFIG"])
 logger = logging.getLogger("penny-lane")
 logger.debug('Test log')

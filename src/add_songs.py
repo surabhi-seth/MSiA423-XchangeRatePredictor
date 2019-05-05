@@ -19,7 +19,7 @@ logger.setLevel("INFO")
 Base = declarative_base()
 
 
-class Track(Base):
+class Tracks(Base):
     """Create a data model for the database to be set up for capturing songs
 
     """
@@ -51,7 +51,7 @@ def create_db(args):
 
     session = get_session(engine=engine)
 
-    track = Track(artist=args.artist, album=args.album, title=args.title)
+    track = Tracks(artist=args.artist, album=args.album, title=args.title)
     session.add(track)
     session.commit()
     logger.info("Database created with song added: %s by %s from album, %s ", args.title, args.artist, args.album)
@@ -70,7 +70,7 @@ def add_track(args):
 
     session = get_session(engine_string=args.engine_string)
 
-    track = Track(artist=args.artist, album=args.album, title=args.title)
+    track = Tracks(artist=args.artist, album=args.album, title=args.title)
     session.add(track)
     session.commit()
     logger.info("%s by %s from album, %s, added to database", args.title, args.artist, args.album)
@@ -96,7 +96,7 @@ if __name__ == '__main__':
     sb_ingest.add_argument("--artist", default="Emancipator", help="Artist of song to be added")
     sb_ingest.add_argument("--title", default="Minor Cause", help="Title of song to be added")
     sb_ingest.add_argument("--album", default="Dusk to Dawn", help="Album of song being added")
-    sb_ingest.add_argument("--engine_string", default='sqlite:///../data/tracksB.db',
+    sb_ingest.add_argument("--engine_string", default='sqlite:///../data/tracks.db',
                            help="SQLAlchemy connection URI for database")
     sb_ingest.set_defaults(func=add_track)
 
