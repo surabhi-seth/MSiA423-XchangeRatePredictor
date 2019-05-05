@@ -124,7 +124,22 @@ def drop_na(df, columns=None):
 
 
 def generate_features(df, save_features=None, **kwargs):
+    """
 
+    Args:
+        df (:py:class:`pandas.DataFrame`): DataFrame containing the data to be transformed into features.
+        save_features (str, optional): If given, the feature set will be saved to this path.
+        **kwargs: Should contain the arguments for each transformation to be performed on the data, `df`.
+            This function assumes each kwarg given except "choose_features" and "get_target" are functions in this file
+            that should be evaluated.
+
+    Returns:
+
+    """
+
+    # Evaluates each function corresponding to a key in `kwargs` and using the key's values as parameters
+    # for that function. The functions "choose_features" and "get_target" are not evaluated until after
+    # this step.
     for step in kwargs:
         if step not in ["choose_features", "get_target"]:
             command = "%s(df, **kwargs[step])" % step

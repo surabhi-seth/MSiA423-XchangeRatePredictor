@@ -5,36 +5,36 @@ CONFIG=config/model_config.ym=example-
 FEATURES=test/model/test/example-features.csv
 TMO=models/example-model.pkl
 
-.PHONY: tests api venv clean initialize clean-pyc clean-env clean-tests
+.PHONY: tests api venv clean initialize clean-pyc clean-env clean-tests features trained-models
 
 
 ${project}-env/bin/activate: requirements.txt
 	test -d ${project}-env || virtualenv ${project}-env
-	. ${project}-env/bin/activate; pip install -r requirements.txt
+	pip install -r requirements.txt
 	touch ${project}-env/bin/activate
 
 venv: ${project}-env/bin/activate
 
-${FEATURES}: ${RAW_DATA}
+${FEATURES}: ${RAW_DATA} src/generate_features.py
 	python run.py generate_features --config=${CONFIG} --input=${RAW_DATA} --output=${FEATURES}
 
 features: ${FEATURES}
 
-${TMO}: ${FEATURES}
+${TMO}: ${FEATURES} src/train_model.py
 	python run.py train_model --config=${CONFIG} --input=${FEATURES} --output=${TMO}
 
 trained-model: ${TMO}
 
-app: venv
-	. ${project}-env/bin/activate; python run.py app
+app
+	python run.py app
 
-swagger: venv
-	. ${project}-env/bin/activate; python run.py swagger
+swagger: app/app.py app/models.py
+	python run.py swagger
 
-test: venv
-	. ${project}-env/bin/activate; python run.py test
+test
+	python run.py test
 
-	. ${project}-env/bin/activate; py.test
+	py.test
 
 clean-tests:
 	rm -rf .pytest_cache
