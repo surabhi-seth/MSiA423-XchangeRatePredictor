@@ -111,32 +111,45 @@ def split_data(X, y, train_size=1, test_size=0, validate_size=0, random_state=24
     return X, y
 
 
-def train_model(df, method=None, save_tmo=None, **kwargs):
+def train_model(df, method=None, save_tmo=None, add_evalset=True, **kwargs):
 
-    assert method in methods.keys()
+    assert method in methods.keys()  # `methods` defined at top of file, possible methods for training
 
+    # If "choose_features" in the config file under "train_model", will reduce the feature set to those listed
     if "choose_features" in kwargs:
         X = choose_features(df, **kwargs["choose_features"])
     else:
         X = df
 
+    # If "get_target" in the config file under "train_model", will get the target data for supervised learning
+    # Otherwise y = None and the model must be unsupervised.
     if "get_target" in kwargs:
         y = get_target(df, **kwargs["get_target"])
     else:
         y = None
 
+    # If "fit", "predict", and other configuration options listed at the top of the file under
+    # "train_model_kwargs" are not in the "train_data" configurations, creates empty dictionaries
+    # in their place to allow consistent calling of the functions below
     kwargs = fillin_kwargs(train_model_kwargs, kwargs)
 
+    # Splits the training data according to the "split_data" parameters. If this is an empty dictionary
+    # (from prior step, because it is not in the configuration file), then the full dataset is returned (train_size=1)
     X, y = split_data(X, y, **kwargs["split_data"])
 
+    # Instantiates a model class for the training `method` provided
     model = methods[method](**kwargs["params"])
 
-    if "validate" in X and "validate" in y:
+    # If `add_evalset` is given as true and validation sets are created in the data split, will add the validation
+    # sets to the model fit parameters for use by the model in training for validation (e.g. for xgboost)
+    if "validate" in X and "validate" in y and add_evalset:
         kwargs["fit"]["eval_set"] = [(X["validate"], y["validate"])]
 
+    # Fit the model with the training data and time doing so
     with Timer("model training", logger) as t:
         model.fit(X["train"], y["train"], **kwargs["fit"])
 
+    # Save the trained model object
     if save_tmo is not None:
         with open(save_tmo, "wb") as f:
             pickle.dump(model, f)
@@ -146,6 +159,8 @@ def train_model(df, method=None, save_tmo=None, **kwargs):
 
 
 def run_training(args):
+    """Orchestrates the training of the model using command line arguments."""
+
     with open(args.config, "r") as f:
         config = yaml.load(f)
 
@@ -173,7 +188,8 @@ def run_training(args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Train model")
-    parser.add_argument('--config', help='path to yaml file with configurations')
+    parser.add_argument('--config', default="config/test_model_config.yml",
+                        help='path to yaml file with configurations')
     parser.add_argumemt('--input', default=None, help="Path to CSV for input to model training")
     parser.add_argument('--output', default=None, help='Path to where the dataset should be saved to (optional')
 
