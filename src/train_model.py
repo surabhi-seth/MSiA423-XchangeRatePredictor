@@ -22,7 +22,25 @@ train_model_kwargs = ["split_data", "params", "fit", "compile"]
 
 
 def split_data(X, y, train_size=1, test_size=0, validate_size=0, random_state=24, save_split_prefix=None):
+    """
 
+    Args:
+        X (:py:class:`pandas.DataFrame` or :py:class:`numpy.Array`): Features to be split
+        y (:py:class:`pandas.Series` or :py:class:`numpy.Array`): Target to be split
+        train_size (`float`): Fraction of dataset to use for training. Default 1 (all data). Must be between 0 and 1.
+        test_size (`float`): Fraction of dataset to use for testing. Default 0 (no data). Must be between 0 and 1.
+        validate_size (`float`): Fraction of dataset to use for validation. Default 0 (no data). Must be between 0 and 1.
+        random_state (`int`): Integer value to choose random seed.
+        save_split_prefix (str, optional): If given, the datasets will be saved with the given prefix, which can include
+            the path to the directory for saving plus a prefix for the file, e.g. `data/features/2019-05-01-` will
+            result in files saved to `data/features/2019-05-01-train-features.csv`,
+            `data/features/2019-05-01-train-targets.csv`, and similar files for `test` and `validate` if `test_size`
+            and/or `validate_size` are greater than 0.
+
+    Returns:
+        X (dict): Dictionary where keys are train, test, and/or validate and values are the X features for those splits.
+        y (dict): Dictionary where keys are train, test, and/or validate and values are the y targets for those splits.
+    """
     if y is not None:
         assert len(X) == len(y)
         include_y = True
@@ -131,15 +149,21 @@ def run_training(args):
     with open(args.config, "r") as f:
         config = yaml.load(f)
 
+    logger.info("Training configuration file, %s, loaded", args.config)
+
     if args.input is not None:
         df = pd.read_csv(args.input)
+        logger.info("Features for input into model loaded from %s", args.input)
     elif "generate_features" in config and "save_features" in config["generate_features"]:
         df = pd.read_csv(config["generate_features"]["save_features"])
+        logger.info("Features for input into model loaded from %s", config["generate_features"]["save_features"])
     else:
         raise ValueError("Path to CSV for input data must be provided through --input or "
                          "'load_data' configuration must exist in config file")
 
     tmo = train_model(df, **config["train_model"])
+
+    #
 
     if args.output is not None:
         with open(args.output, "wb") as f:

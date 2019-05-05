@@ -121,3 +121,5 @@ test/test/*
 .DS_Store
 */.DS_Store
 */.idea
+test/model/test
+!.gitkeep

@@ -7,15 +7,18 @@ To understand different arguments, run `python run.py --help`
 """
 import argparse
 import logging.config
-logging.config.fileConfig("config/logging/local.conf")
+from app.app import app
+
+# Define LOGGING_CONFIG in config.py - path to config file for setting up the logger (e.g. config/logging/local.conf)
+logging.config.fileConfig(app.config["LOGGING_CONFIG"])
 logger = logging.getLogger("run-penny-lane")
+logger.debug('Test log')
 
 from src.add_songs import create_db, add_track
 from src.load_data import run_loading
 from src.generate_features import run_features
 from src.train_model import run_training
 from src.score_model import run_scoring
-from app.app import app
 
 
 def run_app(args):

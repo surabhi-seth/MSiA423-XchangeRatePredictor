@@ -1,4 +1,4 @@
-.PHONY: tests api venv clean initialize clean-pyc clean-env clean-tests trained-model
+.PHONY: tests api venv clean initialize clean-pyc clean-env clean-tests trained-model features
 
 
 pennylane-env/bin/activate: requirements.txt
@@ -8,26 +8,26 @@ pennylane-env/bin/activate: requirements.txt
 
 venv: pennylane-env/bin/activate
 
-data/features/example-features.csv: data/sample/music_data_combined.csv venv
-	. pennylane-env/bin/activate; python run.py generate_features --config=config/test_model_config.yml --input=data/sample/music_data_combined.csv --output=data/features/example-features.csv
+data/features/example-features.csv: data/sample/music_data_combined.csv src/generate_features.py
+	python run.py generate_features --config=config/test_model_config.yml --input=data/sample/music_data_combined.csv --output=data/features/example-features.csv
 
 features: data/features/example-features.csv
 
-models/example-model.pkl: data/features/example-features.csv venv
-	. pennylane-env/bin/activate; python run.py train_model --config=config/test_model_config.yml --input=data/features/example-features.csv --output=models/example-model.pkl
+models/example-model.pkl: data/features/example-features.csv src/train_model.py
+	python run.py train_model --config=config/test_model_config.yml --input=data/features/example-features.csv --output=models/example-model.pkl
 
 trained-model: models/example-model.pkl
 
-app: venv
-	. pennylane-env/bin/activate; python run.py app
+app:
+	python run.py app
 
-swagger: venv
-	. pennylane-env/bin/activate; python run.py swagger
+swagger: app/app.py
+	python run.py swagger
 
-test: venv
-	. pennylane-env/bin/activate; python run.py test
+test:
+	python run.py test
 
-	. pennylane-env/bin/activate; py.test
+	py.test
 
 clean-tests:
 	rm -rf .pytest_cache
