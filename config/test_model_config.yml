@@ -1,5 +1,62 @@
+model:
+  name: example-model
+  author: Chloe Mawer
+  version: AA1
+  description:
+  tags:
+    - classifier
+  dependencies: requirements.txt
 load_data:
-  how: load_csvs
+  how: load_csv
   load_csvs:
-    directory: data/sample/music
+    directroy: data/sample/music/
     n_cores: -1
+  load_csv:
+    path: data/sample/music_data_combined.csv
+    index_col: 0
+generate_features:
+  make_categorical:
+    columns: terms
+    terms:
+      load_column_as_list:
+        path: data/auxiliary/genres.csv
+        header:
+        column: 0
+      one_hot_encode: True
+  bin_values:
+    columns: [key, artist.hotttnesss]
+    quartiles: [4, 2]
+  drop_na:
+    columns: song.hotttnesss
+  choose_features:
+    features_to_use: [key, beats_start, bars_start, duration, terms, loudness]
+    target: song.hotttnesss
+  save_features: test/model/test/music_processed.csv
+train_model:
+  method: linear_regression
+  get_target:
+    target: song.hotttnesss
+  split_data:
+    train_size: 0.75
+    test_size: 0.25
+#    validate_size: 0.15
+    random_state: 24
+    save_split_prefix: test/model/test/example-music
+#  params:
+#    max_depth: 10
+#    learning_rate: 5
+#    random_state: 1019
+#  fit:
+#    eval_metric: auc
+#    verbose: True
+  save_tmo: models/example-music-prediction.pkl
+score_model:
+  path_to_tmo: models/example-music-prediction.pkl
+  choose_features:
+    features_to_use: [key, beats_start, bars_start, duration, terms, loudness]
+  predict:
+    ntree_limit: 0
+  save_scores: test/model/test/example-music-test-scores.csv
+evaluate_model:
+  metrics: [auc, accuracy, logloss]
+

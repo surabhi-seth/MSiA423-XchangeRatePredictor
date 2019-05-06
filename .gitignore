@@ -1,29 +1,20 @@
-# Byte-compiled / optimized / DLL files
+
 __pycache__/
 *.py[cod]
 *$py.class
 .idea/
 .log
 .png
-*.sh
 .idea
-
-# Folders to place all data science files which you dont want tracked
-data/*
-!data/production/
-!data/sample/
-models/*
-!models/README.md
-extra/
-#src/pallet_positions/files
-test/test/*
-#testing
-!test/test/.gitkeep
-!.gitkeep
-
-# ipython notebooks
 *.ipynb
 .ipynb_checkpoints/
+data/*
+!data/sample/
+models/*
+test/test/*
+!.gitkeep
+
+
 
 # C extensions
 *.so
@@ -110,8 +101,25 @@ ENV/
 # Rope project settings
 .ropeproject
 
+__pycache__/
+*.py[cod]
+*$py.class
+.DS_Store
+.idea/
+.log
+.png
+.idea
+*.ipynb
+.ipynb_checkpoints/
+data/*
+!data/sample/
+models/*
+test/test/*
+!.gitkeep
 .idea
 
 .DS_Store
 */.DS_Store
 */.idea
+test/model/test
+!.gitkeep

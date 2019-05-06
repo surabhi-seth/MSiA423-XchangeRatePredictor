@@ -61,11 +61,21 @@ def get_file_names(top_dir):
     return list_of_files
 
 
-def read_csv(path):
+def load_csv(path, **kwargs):
     """Wrapper function for `pandas.read_csv()` method to enable multiprocessing.
 
     """
-    return pd.read_csv(path)
+    return pd.read_csv(path, **kwargs)
+
+
+def load_column_as_list(path, column=0, **kwargs):
+
+    for k in kwargs:
+        logger.debug(kwargs[k])
+
+    df = pd.read_csv(path, **kwargs)
+
+    return df[column].tolist()
 
 
 def load_csvs(file_names=None, directory=None, n_cores=1):
@@ -98,7 +108,7 @@ def load_csvs(file_names=None, directory=None, n_cores=1):
     with h.Timer("Reading CSVs", logger):
         pool = multiprocessing.Pool(processes=n_cores)
 
-        df_list = pool.map(read_csv, file_names)
+        df_list = pool.map(load_csv, file_names)
 
         # Concatenate list of dataframes into one dataframe
         df = pd.concat(df_list, ignore_index=True)
@@ -106,7 +116,26 @@ def load_csvs(file_names=None, directory=None, n_cores=1):
     return df
 
 
-def run(args):
+def load_data(config):
+    how = config["how"].lower()
+
+    if how == "load_csv":
+        if "load_csv" not in config:
+            raise ValueError("'how' given as 'load_csv' but 'load_csv' not in configuration")
+        else:
+            df = load_csv(**config["load_csv"])
+    elif how == "load_csvs":
+        if config["load_csvs"] is None:
+            raise ValueError("'how' given as 'load_csvs' but 'load_csvs' not in configuration")
+        else:
+            df = load_csvs(**config["load_csvs"])
+    else:
+        raise ValueError("Options for 'how' are 'load_csv' and 'load_csvs' but %s was given" % how)
+
+    return df
+
+
+def run_loading(args):
     """Loads config and executes load data set
 
     Args:
@@ -120,10 +149,7 @@ def run(args):
     with open(args.config, "r") as f:
         config = yaml.load(f)
 
-    how = config["load_data"]["how"]
-
-    if how == "load_csvs":
-        df = load_csvs(**config["load_data"]["load_csvs"])
+    df = load_data(**config["load_data"])
 
     if args.save is not None:
         df.to_csv(args.save)
@@ -137,4 +163,4 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    run(args)
+    run_loading(args)
