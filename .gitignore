@@ -1,21 +1,4 @@
 
-__pycache__/
-*.py[cod]
-*$py.class
-.idea/
-.log
-.png
-.idea
-*.ipynb
-.ipynb_checkpoints/
-data/*
-!data/sample/
-models/*
-test/test/*
-!.gitkeep
-
-
-
 # C extensions
 *.so
 
@@ -109,7 +92,6 @@ __pycache__/
 .log
 .png
 .idea
-*.ipynb
 .ipynb_checkpoints/
 data/*
 !data/sample/

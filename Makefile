@@ -1,4 +1,4 @@
-.PHONY: tests api venv clean initialize clean-pyc clean-env clean-tests trained-model features
+.PHONY: test app venv clean clean-pyc clean-env clean-tests trained-model features
 
 
 pennylane-env/bin/activate: requirements.txt
