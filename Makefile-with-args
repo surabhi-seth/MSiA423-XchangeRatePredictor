@@ -5,7 +5,7 @@ CONFIG=config/model_config.ym=example-
 FEATURES=test/model/test/example-features.csv
 TMO=models/example-model.pkl
 
-.PHONY: tests api venv clean initialize clean-pyc clean-env clean-tests features trained-models
+.PHONY: test app venv clean clean-pyc clean-env clean-tests features trained-models
 
 
 ${project}-env/bin/activate: requirements.txt
