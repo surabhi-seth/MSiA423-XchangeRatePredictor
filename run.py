@@ -13,6 +13,7 @@ To add a song to an already created database:
 
     `python run.py ingest --artist="Britney Spears" --title="Radar" --album="Circus"`
 """
+'''
 import argparse
 import logging.config
 logging.config.fileConfig("config/logging/local.conf")
@@ -42,3 +43,39 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
     args.func(args)
+'''
+
+import argparse
+import logging.config
+
+logging.config.fileConfig("config/logging/local.conf")
+logger = logging.getLogger("run-penny-lane")
+
+from src.add_songs import create_db
+from src.evaluate_model import evaluate_model
+from src.score_model import score_model
+from src.postprocess import increment_rate_data
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description="Run components of the model source code")
+    subparsers = parser.add_subparsers()
+
+    # Sub-parser for creating a database
+    sb_create = subparsers.add_parser("create", description="Create database")
+    sb_create.set_defaults(func=create_db)
+
+    # Sub-parser for scoring the final model
+    sb_increment = subparsers.add_parser("increment", description="Increment Rates Data")
+    sb_increment.set_defaults(func=increment_rate_data)
+
+    # Sub-parser for evaluating models
+    sb_evaluate = subparsers.add_parser("evaluate", description="Evaluate ARIMA Models")
+    sb_evaluate.set_defaults(func=evaluate_model)
+
+    # Sub-parser for scoring the final model
+    sb_score = subparsers.add_parser("score", description="Score ARIMA Models")
+    sb_score.set_defaults(func=score_model)
+
+    args = parser.parse_args()
+    args.func()

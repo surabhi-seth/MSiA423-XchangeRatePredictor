@@ -1,6 +1,6 @@
 from app import db
 
-
+'''
 class Track(db.Model):
     """Create a data model for the database to be set up for capturing songs
 
@@ -12,3 +12,28 @@ class Track(db.Model):
 
     def __repr__(self):
         return '<Track %r>' % self.title
+'''
+
+
+class Rates(db.Model):
+    """Create a data model for the database to be set up for capturing rates
+    """
+    DATE = db.Column(db.TEXT, primary_key=True)
+    EUR = db.Column(db.REAL, unique=False)
+    INR = db.Column(db.REAL, unique=False)
+    GBP = db.Column(db.REAL, unique=False)
+
+    def __repr__(self):
+        return '<Rates %r>' % self.DATE
+
+
+class ARIMAParams(db.Model):
+    """Create a data model for the database to be set up for capturing ARIMA parameters
+    """
+    CURRENCY = db.Column(db.TEXT, primary_key=True)
+    P = db.Column(db.INTEGER, unique=False)
+    D = db.Column(db.INTEGER, unique=False)
+    Q = db.Column(db.INTEGER, unique=False)
+
+    def __repr__(self):
+        return '<ARIMA Params %r>' % self.CURRENCY

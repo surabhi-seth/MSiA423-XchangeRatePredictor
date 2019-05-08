@@ -1,4 +1,4 @@
-from app import db
+'''from app import db
 from app.models import Track
 import argparse
 import logging.config
@@ -61,3 +61,48 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
     args.func(args)
+'''
+
+from app import db
+from app.models import Rates, ARIMAParams
+from . import START_DATE, END_DATE
+#import argparse
+
+import requests
+import pandas as pd
+
+import logging.config
+logger = logging.getLogger(__name__)
+
+
+def create_db():
+    """Creates a database with rates from the api
+    Returns: None
+    """
+    url = "https://api.exchangeratesapi.io/history?start_at=" + START_DATE + "&end_at=" + END_DATE + "&base=USD"
+    response = requests.get(url)
+    result = response.json()
+
+    dates_list = list(result['rates'].keys())
+    inputs = {
+        'DATE': [date for date in dates_list],
+        'EUR': [result['rates'][date]['EUR'] for date in dates_list],
+        'INR': [result['rates'][date]['INR'] for date in dates_list],
+        'GBP': [result['rates'][date]['GBP'] for date in dates_list]
+    }
+
+    rates = pd.DataFrame(data=inputs)
+    rates = rates.sort_values(by=['DATE'], ascending=True).reset_index(drop=True)
+
+    db.drop_all()
+    db.create_all()
+    db.session.bulk_insert_mappings(Rates, rates.to_dict(orient="records"))
+    db.session.commit()
+    logger.info("Database created with rates")
+
+
+def create_ARIMAParams(currency, p, d, q):
+    ARIMAParams.query.filter_by(CURRENCY=currency).delete()
+    params = ARIMAParams(CURRENCY=currency, P=p, D=d, Q=q)
+    db.session.add(params)
+    db.session.commit()
