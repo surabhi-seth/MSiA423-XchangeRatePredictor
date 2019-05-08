@@ -51,7 +51,7 @@ import logging.config
 logging.config.fileConfig("config/logging/local.conf")
 logger = logging.getLogger("run-penny-lane")
 
-from src.add_songs import create_db
+from src.create_dataset import create_db
 from src.evaluate_model import evaluate_model
 from src.score_model import score_model
 from src.postprocess import increment_rate_data

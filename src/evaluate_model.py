@@ -1,7 +1,7 @@
 from src import END_DATE
 from src.load_data import load_Rates
 from src.train_model import ARIMAForecasting
-from src.add_songs import create_ARIMAParams
+from src.create_dataset import create_ARIMAParams
 from . import FORECAST_PERIOD
 import pandas as pd
 
