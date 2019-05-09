@@ -45,5 +45,5 @@ def write_records(records, file_location):
 def write_to_S3(file_location):
     # Boto 3
     s3 = boto3.resource('s3')
-    s3.Object('nw_surabhiseth-s3', 'raw_exchange_rates.txt').put(Body=open(file_location, 'rb'))
+    s3.Object('nw-surabhiseth-s3', 'raw_exchange_rates.txt').put(Body=open(file_location, 'rb'))
     return
