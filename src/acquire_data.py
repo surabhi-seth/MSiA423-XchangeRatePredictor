@@ -2,7 +2,6 @@ import json
 import requests
 import config
 import boto3
-from boto.s3.key import Key
 
 from . import START_DATE, END_DATE
 import logging.config
