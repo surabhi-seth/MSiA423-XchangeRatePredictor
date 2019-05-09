@@ -52,6 +52,7 @@ logging.config.fileConfig("config/logging/local.conf")
 logger = logging.getLogger("run-penny-lane")
 
 from src.create_dataset import create_db
+from src.acquire_data import acquire_rates
 from src.evaluate_model import evaluate_model
 from src.score_model import score_model
 from src.postprocess import increment_rate_data
@@ -60,6 +61,10 @@ from src.postprocess import increment_rate_data
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Run components of the model source code")
     subparsers = parser.add_subparsers()
+
+    # Sub-parser for creating a database
+    sb_acquire = subparsers.add_parser("acquire", description="Acquire exchange rate data")
+    sb_acquire.set_defaults(func=acquire_rates)
 
     # Sub-parser for creating a database
     sb_create = subparsers.add_parser("create", description="Create database")
