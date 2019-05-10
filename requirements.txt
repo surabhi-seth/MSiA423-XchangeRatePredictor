@@ -8,3 +8,7 @@ flask_sqlalchemy==2.3.2
 pytest==4.0.1
 boto3==1.9.145
 scipy==1.2.1
+pymysql
+pandas
+awscli
+PyYAML<=3.13,>=3.10
