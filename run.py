@@ -53,24 +53,26 @@ logger = logging.getLogger("run-penny-lane")
 
 from src.create_dataset import create_db
 from src.acquire_data import acquire_rates
-from src.evaluate_model import evaluate_model
+'''from src.evaluate_model import evaluate_model
 from src.score_model import score_model
-from src.postprocess import increment_rate_data
+from src.postprocess import increment_rate_data'''
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Run components of the model source code")
     subparsers = parser.add_subparsers()
 
-    # Sub-parser for creating a database
+    # Sub-parser for acquiring exchange rate data
     sb_acquire = subparsers.add_parser("acquire", description="Acquire exchange rate data")
     sb_acquire.set_defaults(func=acquire_rates)
 
     # Sub-parser for creating a database
-    sb_create = subparsers.add_parser("create", description="Create database")
+    sb_create = subparsers.add_parser("create", description="Create rates database")
     sb_create.set_defaults(func=create_db)
 
-    # Sub-parser for scoring the final model
+    args = parser.parse_args()
+    args.func()
+'''# Sub-parser for scoring the final model
     sb_increment = subparsers.add_parser("increment", description="Increment Rates Data")
     sb_increment.set_defaults(func=increment_rate_data)
 
@@ -80,7 +82,5 @@ if __name__ == '__main__':
 
     # Sub-parser for scoring the final model
     sb_score = subparsers.add_parser("score", description="Score ARIMA Models")
-    sb_score.set_defaults(func=score_model)
+    sb_score.set_defaults(func=score_model)'''
 
-    args = parser.parse_args()
-    args.func()

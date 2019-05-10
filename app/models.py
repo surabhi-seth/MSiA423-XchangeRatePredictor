@@ -1,20 +1,11 @@
+import logging
 from app import db
 
+logger = logging.getLogger(__name__)
+
+db.Model.metadata.reflect(db.engine)
+
 '''
-class Track(db.Model):
-    """Create a data model for the database to be set up for capturing songs
-
-    """
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(100), unique=False, nullable=False)
-    artist = db.Column(db.String(100), unique=False, nullable=False)
-    album = db.Column(db.String(100), unique=False, nullable=True)
-
-    def __repr__(self):
-        return '<Track %r>' % self.title
-'''
-
-
 class Rates(db.Model):
     """Create a data model for the database to be set up for capturing rates
     """
@@ -25,9 +16,9 @@ class Rates(db.Model):
 
     def __repr__(self):
         return '<Rates %r>' % self.DATE
+'''
 
-
-class ARIMAParams(db.Model):
+class ARIMA_Params(db.Model):
     """Create a data model for the database to be set up for capturing ARIMA parameters
     """
     CURRENCY = db.Column(db.TEXT, primary_key=True)

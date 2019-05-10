@@ -1,27 +1,36 @@
 from flask import render_template, request, redirect, url_for
 import logging.config
-from app import db, app
-from app.models import Track
+# from app.models import Tracks
+from flask import Flask
+from src.add_songs import Tracks
+from flask_sqlalchemy import SQLAlchemy
 
-# Define LOGGING_CONFIG in config.py - path to config file for setting up the logger (e.g. config/logging/local.conf)
+# Initialize the Flask application
+app = Flask(__name__)
+
+# Configure flask app from config.py
+app.config.from_object('config')
+
+# Define LOGGING_CONFIG in config.py - path to config file for setting
+# up the logger (e.g. config/logging/local.conf)
 logging.config.fileConfig(app.config["LOGGING_CONFIG"])
 logger = logging.getLogger("penny-lane")
 logger.debug('Test log')
+
+# Initialize the database
+db = SQLAlchemy(app)
 
 
 @app.route('/')
 def index():
     """Main view that lists songs in the database.
-
     Create view into index page that uses data queried from Track database and
     inserts it into the msiapp/templates/index.html template.
-
     Returns: rendered html template
-
     """
 
     try:
-        tracks = Track.query.all()
+        tracks = db.session.query(Tracks).limit(app.config["MAX_ROWS_SHOW"]).all()
         logger.debug("Index page accessed")
         return render_template('index.html', tracks=tracks)
     except:
@@ -32,12 +41,11 @@ def index():
 @app.route('/add', methods=['POST'])
 def add_entry():
     """View that process a POST with new song input
-
     :return: redirect to index page
     """
 
     try:
-        track1 = Track(artist=request.form['artist'], album=request.form['album'], title=request.form['title'])
+        track1 = Tracks(artist=request.form['artist'], album=request.form['album'], title=request.form['title'])
         db.session.add(track1)
         db.session.commit()
         logger.info("New song added: %s by %s", request.form['title'], request.form['artist'])
@@ -45,7 +53,3 @@ def add_entry():
     except:
         logger.warning("Not able to display tracks, error page returned")
         return render_template('error.html')
-
-
-if __name__ == "__main__":
-    app.run(debug=app.config["DEBUG"], port=app.config["PORT"], host=app.config["HOST"])
