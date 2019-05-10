@@ -2,7 +2,7 @@ from os import path
 
 # Getting the parent directory of this file. That will function as the project home.
 PROJECT_HOME = path.dirname(path.abspath(__file__))
-DBCONFIG = path.join(PROJECT_HOME, 'config/dbconfig.yaml')
+DBCONFIG = path.join(PROJECT_HOME, 'config/dbconfig.yml')
 RAW_DATA_LOCATION = path.join(PROJECT_HOME,'data/raw/raw_exchange_rates.json')
 
 DEBUG = True
