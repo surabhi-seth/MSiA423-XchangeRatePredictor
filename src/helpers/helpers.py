@@ -1,3 +1,4 @@
+import os
 import datetime
 import sqlalchemy
 import yaml
@@ -100,7 +101,6 @@ def create_connection(host='127.0.0.1', database="", sqltype="mysql+pymysql", po
     conn = sqlalchemy.create_engine(engine_string)
 
     return conn
-
 
 def get_session(engine=None, engine_string=None):
     """

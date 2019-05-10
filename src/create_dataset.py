@@ -1,7 +1,6 @@
 import config
 import logging.config
 import yaml
-import os
 
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, MetaData
@@ -34,14 +33,14 @@ def create_db():
     """Creates a database with rates from the api
     Returns: None
     """
-    engine = create_connection(engine_string=config.SQLALCHEMY_DATABASE_URI)
-    Base.metadata.drop_all(engine)
+    engine = create_connection(dbconfig=config.DBCONFIG)
+    #Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)
     logger.info("Database created with tables")
 
 
 def create_ARIMA_Params(currency, p, d, q):
-    session = get_session(engine_string=config.SQLALCHEMY_DATABASE_URI)
+    session = get_session(dbconfig=config.DBCONFIG)
     ARIMA_Params.query.filter_by(CURRENCY=currency).delete()
     params = ARIMA_Params(CURRENCY=currency, P=p, D=d, Q=q)
 
