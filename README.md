@@ -111,6 +111,14 @@ pip install -r requirements.txt
 
 ```
 
+#### With `make`
+
+You can run the command:
+ ```bash
+ make venv
+ ``` 
+ to create the virtual environment. You will still need to activate the environment afterwards because it runs the command to create the environment from a separate terminal. 
+
 ### 2. Configure Flask app 
 
 `app/config.py` holds the configurations for the Flask app. It includes the following configurations:
@@ -156,6 +164,13 @@ To add additional songs:
  python run.py app
  ```
 
+
+You can also use `make` by running:
+
+```bash
+make app
+```
+
 ### 5. Interact with the application 
 
 a. On your computer - go to [http://127.0.0.1:3000/](http://127.0.0.1:3000/) to interact with the current version of the app. 
@@ -171,9 +186,42 @@ ssh -L $USER_PORT:127.0.0.1:$USER_PORT $NUIT_USER@msia423.analytics.northwestern
 
 * Go to `http:127.0.0.1:$USER_PORT` to interact with the app. 
 
+
+## Creating the trained model object with Make
+
+From the command line, run: 
+
+```bash
+make trained-model
+```
+
+Running `make trained-model` is the same as running `make models/example.pkl` - the *PHONY* directive just allows for an easier command that creates a potentially long file name. 
+
+When running either `make trained-model` or `make models/example.pkl`, if the file does not exist, it will run the command defined under `models/example.pkl` to create it:
+
+```bash
+python run.py train_model --config=config/test_model_config.yml --input=data/features/example-features.csv --output=models/example-model.pkl
+```
+
+If `models/example.pkl` does exist but any of the files it depends on (`data/sample/music_data_combined.csv`, `src/generate_features.py`, and `config/test_model_config.yml`) have changed since `models/example-model.pkl` was created, it will run the command again to recreate the model file. 
+
+If `data/features/example-features.csv` doesn't exist when calling `make trained-model` or if it has changed since its dependencies were last changed, it will also create `data/features/example-features.csv` using the command defined for it.  
+
+Therefore, the first time you run `make trained-model`, it will create the features file and then the trained model object because neither exists. 
+
+If you change the configurations file, the code files, or the raw data file, it will recreate the trained model object in subsequent runs. 
+
+It is suggested that you version any models and their corresponding configuration files between changes of the configuration YAML or any other dependencies. 
 ## Testing 
 
 Run `pytest` from the command line in the main project repository. 
 
 
 Tests exist in `test/test_helpers.py`
+
+You can also run the command: 
+
+```bash
+make test
+```
+

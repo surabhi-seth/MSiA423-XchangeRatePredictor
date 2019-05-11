@@ -2,12 +2,12 @@
 
 # To reproduce the trained model object, run `make trained-model`
 
-data/features/example-features.csv: data/sample/music_data_combined.csv src/generate_features.py
+data/features/example-features.csv: data/sample/music_data_combined.csv src/generate_features.py config/test_model_config.yml
 	python run.py generate_features --config=config/test_model_config.yml --input=data/sample/music_data_combined.csv --output=data/features/example-features.csv
 
 features: data/features/example-features.csv
 
-models/example-model.pkl: data/features/example-features.csv src/train_model.py
+models/example-model.pkl: data/features/example-features.csv src/train_model.py config/test_model_config.yml
 	python run.py train_model --config=config/test_model_config.yml --input=data/features/example-features.csv --output=models/example-model.pkl
 
 trained-model: models/example-model.pkl
