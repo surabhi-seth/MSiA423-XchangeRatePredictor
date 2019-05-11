@@ -94,7 +94,9 @@ __pycache__/
 .idea
 .ipynb_checkpoints/
 data/*
+data/features/*
 !data/sample/
+
 models/*
 test/test/*
 !.gitkeep
@@ -105,3 +107,6 @@ test/test/*
 */.idea
 test/model/test
 !.gitkeep
+!data/features
+data/features/*
+!data/features/.gitkeep
