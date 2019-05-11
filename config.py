@@ -3,7 +3,7 @@ from os import path
 # Getting the parent directory of this file. That will function as the project home.
 PROJECT_HOME = path.dirname(path.abspath(__file__))
 DBCONFIG = path.join(PROJECT_HOME, 'config/dbconfig.yml')
-RAW_DATA_LOCATION = path.join(PROJECT_HOME,'data/raw/raw_exchange_rates.json')
+MODEL_CONFIG = path.join(PROJECT_HOME, 'config/model_config.yml')
 
 DEBUG = True
 LOGGING_CONFIG = "config/logging/local.conf"

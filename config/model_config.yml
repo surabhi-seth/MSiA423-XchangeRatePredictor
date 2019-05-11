@@ -1,0 +1,7 @@
+acquire_rates:
+  BASE_URL: https://api.exchangeratesapi.io/history
+  START_DATE: 2016-04-15
+  END_DATE: 2019-04-15
+  RAW_DATA_LOCATION: data/raw/raw_exchange_rates.json
+  S3_LOCATION: nw-surabhiseth-s3
+  S3_FILE_NAME: raw_exchange_rates.txt
