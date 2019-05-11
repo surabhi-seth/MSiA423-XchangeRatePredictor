@@ -88,9 +88,15 @@ def create_connection(host='127.0.0.1', database="", sqltype="mysql+pymysql", po
             database = ifin("dbname", db, "")
             sqltype = ifin("type", db, sqltype)
             port = db["port"]
-            user_env = db["user_env"]
-            password_env = db["password_env"]
+            username = db["user_env"]
+            password = db["password_env"]
 
+        logger.info(host)
+        logger.info(database)
+        logger.info(sqltype)
+        logger.info(port)
+        logger.info(username)
+        logger.info(password)
         username = os.environ.get(user_env) if username is None else username
         password = os.environ.get(password_env) if password is None else password
 
@@ -98,6 +104,7 @@ def create_connection(host='127.0.0.1', database="", sqltype="mysql+pymysql", po
         engine_string = engine_string.format(sqltype=sqltype, username=username,
                                              password=password, host=host, port=port, database=database)
 
+    logger.info(engine_string)
     conn = sqlalchemy.create_engine(engine_string)
 
     return conn
