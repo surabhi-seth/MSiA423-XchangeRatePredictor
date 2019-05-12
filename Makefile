@@ -29,8 +29,6 @@ app:
 
 # Run all tests
 test:
-	python run.py test
-
 	py.test
 
 # Clean up things

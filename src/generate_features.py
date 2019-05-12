@@ -8,8 +8,8 @@ import boto3
 import sqlalchemy
 import pandas as pd
 
-from load_data import load_data, load_column_as_list
-from helpers.helpers import fillin_kwargs
+from src.load_data import load_data, load_column_as_list
+from src.helpers.helpers import fillin_kwargs
 
 logger = logging.getLogger(__name__)
 
