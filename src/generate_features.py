@@ -124,6 +124,16 @@ def one_hot_encode(df, columns, drop_original=True):
 
 
 def drop_na(df, columns=None):
+    """Drops rows of dataframe where there are null values in the columns given.
+
+    Args:
+        df (:py:class:`pandas.DataFrame`): DataFrame containing data
+        columns (str or list of str, optional): Name of column or list of columns for which to drop rows
+            that contain nulls. If None, the original dataframe will be returned.
+
+    Returns:
+        df (:py:class:`pandas.DataFrame`): DataFrame containing only data for which no nulls existed in the columns
+    """
     if columns is not None:
         columns = [columns] if type(columns) == str else columns
         num_nas = df[columns].isna().sum()
@@ -133,7 +143,7 @@ def drop_na(df, columns=None):
         df = df.dropna(subset=columns)
         logger.warning("%i values were dropped from the dataset because of missing values", df_len - len(df))
     else:
-        logger.warning("No columns provided for dropna")
+        logger.warning("No columns provided for drop_na, original dataframe being returned")
 
     return df
 
