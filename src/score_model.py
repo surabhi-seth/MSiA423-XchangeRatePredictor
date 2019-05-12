@@ -60,15 +60,3 @@ def run_scoring(args):
 
     if args.output is not None:
         pd.DataFrame(y_predicted).to_csv(args.output, index=False)
-
-
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description="Score model")
-    parser.add_argument('--config', '-c', help='path to yaml file with configurations')
-    parser.add_argumemt('--input', '-i', default=None, help="Path to CSV for input to model scoring")
-    parser.add_argument('--output', '-o', default=None, help='Path to where the scores should be saved to (optional)')
-
-    args = parser.parse_args()
-
-    run_scoring(args)
-

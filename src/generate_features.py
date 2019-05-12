@@ -8,8 +8,8 @@ import boto3
 import sqlalchemy
 import pandas as pd
 
-from src.load_data import load_data, load_column_as_list
-from src.helpers.helpers import fillin_kwargs
+from load_data import load_data, load_column_as_list
+from helpers.helpers import fillin_kwargs
 
 logger = logging.getLogger(__name__)
 
@@ -191,12 +191,3 @@ def run_features(args):
 
     return df
 
-
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description="Generate features")
-    parser.add_argument('--config', help='path to yaml file with configurations')
-    parser.add_argumemt('--input', default=None, help="Path to CSV for generating features from")
-
-    args = parser.parse_args()
-
-    run_features(args)

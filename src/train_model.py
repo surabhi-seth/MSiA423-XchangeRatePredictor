@@ -185,15 +185,3 @@ def run_training(args):
         with open(args.output, "wb") as f:
             pickle.dump(tmo, f)
         logger.info("Trained model object saved to %s", args.output)
-
-
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description="Train model")
-    parser.add_argument('--config', default="config/test_model_config.yml",
-                        help='path to yaml file with configurations')
-    parser.add_argumemt('--input', default=None, help="Path to CSV for input to model training")
-    parser.add_argument('--output', default=None, help='Path to where the dataset should be saved to (optional')
-
-    args = parser.parse_args()
-
-    run_training(args)
