@@ -1,4 +1,4 @@
-.PHONY: test app venv clean clean-pyc clean-env clean-tests trained-model features
+.PHONY: test app venv clean clean-pyc clean-env clean-tests trained-model features clouds
 
 # To reproduce the trained model object, run `make trained-model`
 
@@ -12,6 +12,7 @@ models/example-model.pkl: data/features/example-features.csv src/train_model.py 
 
 trained-model: models/example-model.pkl
 
+all: features trained-model
 
 # Below are some other make functions that do useful things
 
