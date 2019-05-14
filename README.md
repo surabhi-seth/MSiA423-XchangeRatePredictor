@@ -112,8 +112,8 @@ pip install -r requirements.txt
 
 ### 2. Initialize the database 
 
-1. You can create either a mysql database in RDS OR a SQLITE database locally.
-2. To create a mysql database in RDS instance:
+A. You can create either a mysql database in RDS OR a SQLITE database locally.
+B. To create a mysql database in RDS instance:
 
     a. Within the project directory, open config/dbconfig.yml.
     
@@ -123,7 +123,7 @@ pip install -r requirements.txt
 
     `python run.py create_db`
 
-3. (Optional) To create a SQLITE database locally (instead of RDS):
+C. (Optional) To create a SQLITE database locally (instead of RDS):
 
     a. Within the project directory, open config.py
     
@@ -137,8 +137,8 @@ pip install -r requirements.txt
 
 
 ### 3. Acquire/ingest the source data
-1. Within the project directory, open config/model_config.yml.
-2. Change the S3_LOCATION and S3_FILE_NAME to the bucket and file name where you would like the source JSON to be dumped.
-3. Go to the project directory and run:
+A. Within the project directory, open config/model_config.yml.
+B. Change the S3_LOCATION and S3_FILE_NAME to the bucket and file name where you would like the source JSON to be dumped.
+C. Go to the project directory and run:
 
     `python run.py acquire`
