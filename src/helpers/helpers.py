@@ -88,8 +88,8 @@ def create_connection(host='127.0.0.1', database="", sqltype="mysql+pymysql", po
             database = ifin("dbname", db, "")
             sqltype = ifin("type", db, sqltype)
             port = db["port"]
-            username = db["user_env"]
-            password = db["password_env"]
+            username = user_env
+            password = password_env
 
         username = os.environ.get(user_env) if username is None else username
         password = os.environ.get(password_env) if password is None else password

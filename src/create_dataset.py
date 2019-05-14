@@ -31,14 +31,14 @@ class ARIMA_Params(Base):
         return '<ARIMA Params %r>' % self.CURRENCY
 
 
-def create_db():
+def create_db(args):
     """Creates a RDS or a SQLITE database (based on configuration) with ARIMA_Params table
     Returns: None
     """
     dbconfig = config.DBCONFIG
     try:
         if dbconfig is not None:
-            engine = create_connection(dbconfig=config.DBCONFIG)
+            engine = create_connection(dbconfig=config.DBCONFIG, username=args.u, password=args.p)
             logger.info("Creating RDS database")
         else:
             engine = create_connection(engine_string=config.SQLALCHEMY_DATABASE_URI)

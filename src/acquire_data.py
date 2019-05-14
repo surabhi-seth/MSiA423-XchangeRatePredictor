@@ -11,7 +11,7 @@ import logging.config
 logger = logging.getLogger(__name__)
 
 
-def acquire_rates():
+def acquire_rates(args):
     """Calls API to get exchange rate data and dumps the JSON in S3 bucket
     """
     try:

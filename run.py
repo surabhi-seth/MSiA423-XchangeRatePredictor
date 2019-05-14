@@ -37,10 +37,12 @@ if __name__ == '__main__':
 
     # Sub-parser for creating a database
     sb_create = subparsers.add_parser("create_db", description="Create rates database")
+    sb_create.add_argument("--u", default="", help="Username for connecting to the database")
+    sb_create.add_argument("--p", default="", help="Password")
     sb_create.set_defaults(func=create_db)
 
     args = parser.parse_args()
-    args.func()
+    args.func(args)
 
 '''# Sub-parser for scoring the final model
     sb_increment = subparsers.add_parser("increment", description="Increment Rates Data")
