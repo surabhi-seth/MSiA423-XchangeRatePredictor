@@ -88,6 +88,7 @@ def write_to_S3(file_location, bucket_name, file_name):
     try:
         s3 = boto3.resource('s3')
         s3.Object(bucket_name, file_name).put(Body=open(file_location, 'rb'))
+        logger.info("JSON uploaded to S3 bucket")
     except botocore.exceptions.NoCredentialsError as e:
         logger.error("Invalid S3 credentials")
         sys.exit(1)
