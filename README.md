@@ -3,16 +3,13 @@
 <!-- toc -->
 
 - [Project Charter](#project-charter)
-- [Backlog](#backlog)
 - [Repo structure](#repo-structure)
-- [Documentation](#documentation)
 - [Running the application](#running-the-application)
   * [1. Set up environment](#1-set-up-environment)
     + [With `virtualenv` and `pip`](#with-virtualenv-and-pip)
     + [With `conda`](#with-conda)
   * [2. Initialize the database](#2-initialize-the-database)
   * [3. Acquire/ingest the source data](#3-acquireingest-the-source-data)
-- [Testing](#testing)
 
 <!-- tocstop -->
 
