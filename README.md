@@ -115,21 +115,21 @@ pip install -r requirements.txt
 1. You can create either a mysql database in RDS OR a SQLITE database locally.
 2. To create a mysql database in RDS instance:
 
-    a. Open <project directory>/config/dbconfig.yml
+    a. Within the project directory, open config/dbconfig.yml.
     
     b. The host, port, user_env, password_env and dbname will need to be changed appropriately to the credentials corresponding the RDS instance where you want the mysql database created.
     
-    c. Go to the project directory and run: python run.py create_db.
+    c. Go to the project directory and run:
 
     `python run.py create_db`
 
 3. (Optional) To create a SQLITE database locally (instead of RDS):
 
-    a. Open <project directory>/config.py
+    a. Within the project directory, open config.py
     
     b. Set DBCONFIG = None
     
-    c. The location where the SQLITE database will be created locally is default setin the config DB_PATH as <project directory>/data with the database name as XchangeRatePredictor.db. Change that if required.
+    c. The location where the SQLITE database will be created locally is default set in the config DB_PATH. It is default set to the "data" directory within the project repository with the database name as "XchangeRatePredictor.db". Change that only if required.
     
     d. Go to the project directory and run:
     
@@ -137,7 +137,7 @@ pip install -r requirements.txt
 
 
 ### 3. Acquire/ingest the source data
-1. Open <project directory>/config/model_config.yml.
+1. Within the project directory, open config/model_config.yml.
 2. Change the S3_LOCATION and S3_FILE_NAME to the bucket and file name where you would like the source JSON to be dumped.
 3. Go to the project directory and run:
 
