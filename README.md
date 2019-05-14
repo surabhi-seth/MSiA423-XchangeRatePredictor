@@ -116,7 +116,9 @@ pip install -r requirements.txt
 2. To create a mysql database in RDS instance:
 
     a. Open <project directory>/config/dbconfig.yml
+    
     b. The host, port, user_env, password_env and dbname will need to be changed appropriately to the credentials corresponding the RDS instance where you want the mysql database created.
+    
     c. Go to the project directory and run: python run.py create_db.
 
     `python run.py create_db`
@@ -124,8 +126,11 @@ pip install -r requirements.txt
 3. (Optional) To create a SQLITE database locally (instead of RDS):
 
     a. Open <project directory>/config.py
+    
     b. Set DBCONFIG = None
+    
     c. The location where the SQLITE database will be created locally is default setin the config DB_PATH as <project directory>/data with the database name as XchangeRatePredictor.db. Change that if required.
+    
     d. Go to the project directory and run:
     
     `python run.py create_db`
