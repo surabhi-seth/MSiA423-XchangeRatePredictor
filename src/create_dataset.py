@@ -38,7 +38,7 @@ def create_db(args):
     dbconfig = config.DBCONFIG
     try:
         if dbconfig is not None:
-            engine = create_connection(dbconfig=config.DBCONFIG, username=args.u, password=args.p)
+            engine = create_connection(dbconfig=config.DBCONFIG, user_env=args.u, password_env=args.p)
             logger.info("Creating RDS database")
         else:
             engine = create_connection(engine_string=config.SQLALCHEMY_DATABASE_URI)
