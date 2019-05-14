@@ -11,4 +11,3 @@ scipy==1.2.1
 pymysql
 pandas
 awscli
-PyYAML<=3.13,>=3.10
