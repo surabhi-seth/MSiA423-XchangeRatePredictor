@@ -25,7 +25,7 @@ class ARIMA_Params(Base):
     CURRENCY = Column(String(10), primary_key=True)
     P = Column(Integer, unique=False, nullable=False)
     D = Column(Integer, unique=False, nullable=False)
-    Q = Column(Integer, unique=False, nullable=True)
+    Q = Column(Integer, unique=False, nullable=False)
 
     def __repr__(self):
         return '<ARIMA Params %r>' % self.CURRENCY
