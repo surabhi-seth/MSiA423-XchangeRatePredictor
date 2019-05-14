@@ -10,14 +10,16 @@
   * [1. Set up environment](#1-set-up-environment)
     + [With `virtualenv` and `pip`](#with-virtualenv-and-pip)
     + [With `conda`](#with-conda)
-  * [2. Configure Flask app](#2-configure-flask-app)
-  * [3. Initialize the database](#3-initialize-the-database)
-  * [4. Run the application](#4-run-the-application)
+  * [2. Initialize the database](#2-initialize-the-database)
+  * [3. Acquire/ingest the source data](#3-acquireingest-the-source-data)
 - [Testing](#testing)
 
 <!-- tocstop -->
 
 ## Project Charter 
+**Developer**: Surabhi Seth
+
+**QA**: Rachel Rosenberg
 
 **Vision**: Increase the customer volume using the Bank of Etas (BofE) foreign currency exchange service through an exchange rate predictor which provides a unique value add to the customers and a better overall service experience. 
 
@@ -27,21 +29,6 @@
 1. The Mean Absolute Percentage Error (MAPE) for the rate predictions is less that 15%.
 2. There is a 1% increase in the customer volume in 6 months from the time this feature goes live.
   
-## Backlog & Icebox
-**Theme:** Build a currency exchange forecast application for the BofE customers
-
-**Epics:**
-1. Get historic exchange rate data.
-2. Predictive Model Evaluation
-3. Forecast rates
-4. Expose the rate forecasts to the end user
-5. Test deployment
-6. Production deployment
-7. Tech Tasks
-
-**Stories:**
-
-![image](https://github.com/surabhi-seth/MSiA423-XchangeRatePredictor/blob/master/Backlog.png)
 
 ## Repo structure 
 
@@ -59,7 +46,7 @@
 │
 ├── data                              <- Folder that contains data used or generated. Only the external/ and sample/ subdirectories are tracked by git. 
 │   ├── archive/                      <- Place to put archive data is no longer usabled. Not synced with git. 
-│   ├── external/                     <- External data sources, will be synced with git
+│   ├── raw/                          <- Raw data from external data sources, will be synced with git
 │   ├── sample/                       <- Sample data used for code development and testing, will be synced with git
 │
 ├── docs                              <- A default Sphinx project; see sphinx-doc.org for details.
@@ -79,8 +66,8 @@
 │   ├── archive/                      <- No longer current scripts.
 │   ├── helpers/                      <- Helper scripts used in main src files 
 │   ├── sql/                          <- SQL source code
-│   ├── add_songs.py                  <- Script for creating a (temporary) MySQL database and adding songs to it 
-│   ├── ingest_data.py                <- Script for ingesting data from different sources 
+│   ├── create_dataset.py             <- Script for creating a (temporary) MySQL database 
+│   ├── acquire_data.py               <- Script for ingesting data from different sources 
 │   ├── generate_features.py          <- Script for cleaning and transforming data and generating features used for use in training and scoring.
 │   ├── train_model.py                <- Script for training machine learning model(s)
 │   ├── score_model.py                <- Script for scoring new predictions using a trained model.
@@ -96,15 +83,11 @@
 ```
 This project structure was partially influenced by the [Cookiecutter Data Science project](https://drivendata.github.io/cookiecutter-data-science/).
 
-## Documentation
- 
-* Open up `docs/build/html/index.html` to see Sphinx documentation docs. 
-* See `docs/README.md` for keeping docs up to date with additions to the repository.
 
 ## Running the application 
 ### 1. Set up environment 
 
-The `requirements.txt` file contains the packages required to run the model code. An environment can be set up in two ways. See bottom of README for exploratory data analysis environment setup. 
+The `requirements.txt` file contains the packages required to run the model code. An environment can be set up in two ways. 
 
 #### With `virtualenv`
 
@@ -127,43 +110,30 @@ pip install -r requirements.txt
 
 ```
 
-### 2. Configure Flask app 
+### 2. Initialize the database 
 
-`config.py` holds the configurations for the Flask app. It includes the following configurations:
+1. You can create either a mysql database in RDS OR a SQLITE database locally.
+2. To create a mysql database in RDS instance:
 
-```python
-DEBUG = True  # Keep True for debugging, change to False when moving to production 
-LOGGING_CONFIG = "config/logging/local.conf"  # Path to file that configures Python logger
-PORT = 3002  # What port to expose app on 
-SQLALCHEMY_DATABASE_URI = 'sqlite:////tmp/tracks.db'  # URI for database that contains tracks
+    a. Open <project directory>/config/dbconfig.yml
+    b. The host, port, user_env, password_env and dbname will need to be changed appropriately to the credentials corresponding the RDS instance where you want the mysql database created.
+    c. Go to the project directory and run: python run.py create_db.
 
-```
+    `python run.py create_db`
 
+3. (Optional) To create a SQLITE database locally (instead of RDS):
 
-### 3. Initialize the database 
-
-To create the database in the location configured in `config.py` with one initial song, run: 
-
-`python run.py create --artist=<ARTIST> --title=<TITLE> --album=<ALBUM>`
-
-To add additional songs:
-
-`python run.py ingest --artist=<ARTIST> --title=<TITLE> --album=<ALBUM>`
+    a. Open <project directory>/config.py
+    b. Set DBCONFIG = None
+    c. The location where the SQLITE database will be created locally is default setin the config DB_PATH as <project directory>/data with the database name as XchangeRatePredictor.db. Change that if required.
+    d. Go to the project directory and run:
+    
+    `python run.py create_db`
 
 
-### 4. Run the application 
- 
- ```bash
- python app.py 
- ```
+### 3. Acquire/ingest the source data
+1. Open <project directory>/config/model_config.yml.
+2. Change the S3_LOCATION and S3_FILE_NAME to the bucket and file name where you would like the source JSON to be dumped.
+3. Go to the project directory and run:
 
-### 5. Interact with the application 
-
-Go to [http://127.0.0.1:3000/]( http://127.0.0.1:3000/) to interact with the current version of hte app. 
-
-## Testing 
-
-Run `pytest` from the command line in the main project repository. 
-
-
-Tests exist in `test/test_helpers.py`
+    `python run.py acquire`
