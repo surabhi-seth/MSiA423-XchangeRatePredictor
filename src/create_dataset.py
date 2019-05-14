@@ -16,7 +16,8 @@ logger.setLevel("INFO")
 Base = declarative_base()
 
 class ARIMA_Params(Base):
-    """Create a data model for the database to be set up for capturing songs
+    """
+    Create data model for the database for capturing parameters for best ARIMA models for each currency pair
     """
 
     __tablename__ = 'ARIMA_Params'
@@ -31,7 +32,7 @@ class ARIMA_Params(Base):
 
 
 def create_db():
-    """Creates a database with ARIMA_Params table
+    """Creates a RDS or a SQLITE database (based on configuration) with ARIMA_Params table
     Returns: None
     """
     dbconfig = config.DBCONFIG

@@ -9,6 +9,8 @@ DEBUG = True
 LOGGING_CONFIG = "config/logging/local.conf"
 PORT = 3000
 APP_NAME = "penny-lane"
-SQLALCHEMY_DATABASE_URI = 'sqlite:////Users/surabhis/PycharmProjects/rates.db'
+
+DB_PATH = path.join(PROJECT_HOME, 'data/XchangeRatePredictor.db')
+SQLALCHEMY_DATABASE_URI = 'sqlite:///{}'.format(DB_PATH) #'sqlite:////Users/surabhis/PycharmProjects/rates.db'
 SQLALCHEMY_TRACK_MODIFICATIONS = True
 HOST = "127.0.0.1"
