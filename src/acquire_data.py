@@ -12,8 +12,7 @@ logger = logging.getLogger(__name__)
 
 
 def acquire_rates():
-    """Calls API to get exchange rate data
-    Returns: JSON response
+    """Calls API to get exchange rate data and dumps the JSON in S3 bucket
     """
     try:
         with open(config.MODEL_CONFIG, "r") as f:
@@ -22,6 +21,7 @@ def acquire_rates():
         logger.error("YAML not found")
         sys.exit(1)
 
+    # Construct the API URL from the configs set in the yaml
     load_config = model_config["acquire_rates"]
     base_url = load_config["BASE_URL"]
     start_date = load_config["START_DATE"]
