@@ -6,6 +6,7 @@ import boto3
 import yaml
 import config
 from os import path
+from src.load_data import load_raw_source
 
 import logging.config
 logger = logging.getLogger(__name__)
@@ -23,3 +24,7 @@ def train_model(args):
     except FileNotFoundError:
         logger.error("YAML not found")
         sys.exit(1)
+
+    load_config = model_config["train_model"]
+    local_results_file = load_config["DOWNLOAD_LOCATION"]
+    load_raw_source(local_results_file)

@@ -22,6 +22,7 @@ logger = logging.getLogger("run-penny-lane")
 
 from src.create_dataset import create_db
 from src.acquire_data import acquire_rates
+from src.train_model import train_model
 #from src.evaluate_model import evaluate_model
 #from src.score_model import score_model
 #from src.postprocess import increment_rate_data
@@ -40,6 +41,10 @@ if __name__ == '__main__':
     sb_create.add_argument("--u", default="", help="Username for connecting to the database")
     sb_create.add_argument("--p", default="", help="Password")
     sb_create.set_defaults(func=create_db)
+
+    # Sub-parser for training the model
+    sb_train = subparsers.add_parser("train", description="Train ARIMA models")
+    sb_train.set_defaults(func=train_model)
 
     args = parser.parse_args()
     args.func(args)

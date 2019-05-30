@@ -27,7 +27,7 @@ def load_ARIMAParams():
     ARIMAParams = pd.read_sql_query("select * from ARIMA_Params", con=db.engine);
     return ARIMAParams;
 
-def load_raw_source():
+def load_raw_source(local_results_file):
     try:
         with open(config.MODEL_CONFIG, "r") as f:
             model_config = yaml.load(f)
@@ -40,7 +40,6 @@ def load_raw_source():
     # Get raw data from S3 bucket
     bucket_name = load_config["S3_LOCATION"]
     file_name = load_config["S3_FILE_NAME"]
-    local_results_file = model_config["train_model"]["DOWNLOAD_LOCATION"]
 
     s3 = boto3.resource("s3")
     s3.meta.client.download_file(bucket_name, file_name, local_results_file)
