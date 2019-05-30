@@ -65,13 +65,14 @@ def create_ARIMA_Params(args, currency, p, d, q):
         Returns: None
     """
     engine = get_engine(args)
+
     try:
         session = get_session(engine)
         old_ARIMA_Params = session.query(ARIMA_Params.CURRENCY, ARIMA_Params.P, ARIMA_Params.D, ARIMA_Params.Q).\
             filter_by(CURRENCY=currency)
         old_ARIMA_Params.delete()
 
-        params = ARIMA_Params(CURRENCY=currency, P=p, D=d, Q=q)
+        params = ARIMA_Params(CURRENCY=currency, P=int(p), D=int(d), Q=int(q))
         session.add(params)
         session.commit()
         logger.info("ARIMA Model parameters loaded in the db")
