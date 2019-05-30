@@ -35,13 +35,11 @@ def load_raw_source(local_results_file):
         logger.error("YAML not found")
         sys.exit(1)
 
-    load_config = model_config["acquire_rates"]
-
     # Get raw data from S3 bucket
+    load_config = model_config["acquire_rates"]
     bucket_name = load_config["S3_LOCATION"]
     file_name = load_config["S3_FILE_NAME"]
 
     s3 = boto3.resource("s3")
     s3.meta.client.download_file(bucket_name, file_name, local_results_file)
-
     return

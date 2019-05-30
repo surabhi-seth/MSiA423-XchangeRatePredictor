@@ -36,10 +36,10 @@ def get_engine(args):
     try:
         if dbconfig is not None:
             engine = create_connection(dbconfig=config.DBCONFIG, user_env=args.u, password_env=args.p)
-            logger.info("Creating RDS database")
+            logger.info("Accessing RDS database")
         else:
             engine = create_connection(engine_string=config.SQLALCHEMY_DATABASE_URI)
-            logger.info("Creating sqlite database")
+            logger.info("Accessing sqlite database")
     except Exception as e:
         logger.error(e)
         sys.exit(1)
@@ -67,7 +67,10 @@ def create_ARIMA_Params(args, currency, p, d, q):
     engine = get_engine(args)
     try:
         session = get_session(engine)
-        ARIMA_Params.query.filter_by(CURRENCY=currency).delete()
+        old_ARIMA_Params = session.query(ARIMA_Params.CURRENCY, ARIMA_Params.P, ARIMA_Params.D, ARIMA_Params.Q).\
+            filter_by(CURRENCY=currency)
+        old_ARIMA_Params.delete()
+
         params = ARIMA_Params(CURRENCY=currency, P=p, D=d, Q=q)
         session.add(params)
         session.commit()

@@ -44,6 +44,8 @@ if __name__ == '__main__':
 
     # Sub-parser for training the model
     sb_train = subparsers.add_parser("train", description="Train ARIMA models")
+    sb_train.add_argument("--u", default="", help="Username for connecting to the database")
+    sb_train.add_argument("--p", default="", help="Password")
     sb_train.set_defaults(func=train_model)
 
     args = parser.parse_args()
