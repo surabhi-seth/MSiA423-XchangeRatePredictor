@@ -30,11 +30,8 @@ class ARIMA_Params(Base):
     def __repr__(self):
         return '<ARIMA Params %r>' % self.CURRENCY
 
-
-def create_db(args):
-    """Creates a RDS or a SQLITE database (based on configuration) with ARIMA_Params table
-    Returns: None
-    """
+def get_engine(args):
+    '''Creates engine for an RDS or local sqlite database'''
     dbconfig = config.DBCONFIG
     try:
         if dbconfig is not None:
@@ -43,22 +40,33 @@ def create_db(args):
         else:
             engine = create_connection(engine_string=config.SQLALCHEMY_DATABASE_URI)
             logger.info("Creating sqlite database")
+    except Exception as e:
+        logger.error(e)
+        sys.exit(1)
 
-        #Base.metadata.drop_all(engine)
+    return engine
+
+
+def create_db(args):
+    """Creates a RDS or a SQLITE database (based on configuration) with ARIMA_Params table
+    Returns: None
+    """
+    engine = get_engine(args)
+    try:
         Base.metadata.create_all(engine)
         logger.info("Database created with tables")
     except Exception as e:
         logger.error(e)
         sys.exit(1)
 
-def create_ARIMA_Params(currency, p, d, q):
-    dbconfig = config.DBCONFIG
-    try:
-        if dbconfig is not None:
-            session = get_session(dbconfig=dbconfig)
-        else:
-            session = get_session(engine_string=config.SQLALCHEMY_DATABASE_URI)
 
+def create_ARIMA_Params(args, currency, p, d, q):
+    """Stores ARIMA_Params in the table
+        Returns: None
+    """
+    engine = get_engine(args)
+    try:
+        session = get_session(engine)
         ARIMA_Params.query.filter_by(CURRENCY=currency).delete()
         params = ARIMA_Params(CURRENCY=currency, P=p, D=d, Q=q)
         session.add(params)

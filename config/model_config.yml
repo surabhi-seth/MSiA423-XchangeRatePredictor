@@ -5,3 +5,9 @@ acquire_rates:
   RAW_DATA_LOCATION: data/raw/raw_exchange_rates.json
   S3_LOCATION: nw-surabhiseth-s3
   S3_FILE_NAME: raw_exchange_rates.txt
+train_model:
+  DOWNLOAD_LOCATION: data/raw/exchange_rates_dl.json
+score_model:
+  BASE_URL: https://api.exchangeratesapi.io/history
+  FORECAST_PERIOD: 7
+  NUM_LOOK_BACK_YRS: 3
