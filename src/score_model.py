@@ -4,7 +4,8 @@ from datetime import datetime, timedelta
 import pandas as pd
 from src.evaluate_model import ARIMAForecasting
 from src.load_data import load_ARIMA_Params
-from src.helpers.helpers import invoke_api
+from src.helpers.helpers import invoke_api, get_engine
+from src.create_dataset import create_Predictions
 import config
 
 import logging.config
@@ -42,7 +43,7 @@ def generate_predictions(rates, ARIMA_params, FORECAST_PERIOD, **kwargs):
             predictions_df = predictions_df.\
                 append({'currrency': curr, 'date': next_dt, 'rate': predictions[i]}, ignore_index=True)
 
-    print(predictions_df)
+    #print(predictions_df)
     return predictions_df
 
 
@@ -67,6 +68,7 @@ def score_model(args):
     api_url = api_url.format(base_url=base_url, start_date=start_date,
                              end_date=end_date)
 
+    # Invoke the api and get latest exchange rates
     data = invoke_api(api_url)
 
     dates_list = list(data['rates'].keys())
@@ -76,10 +78,17 @@ def score_model(args):
         'INR': [data['rates'][date]['INR'] for date in dates_list],
         'GBP': [data['rates'][date]['GBP'] for date in dates_list]
     }
-
     rates = pd.DataFrame(data=inputs)
     rates = rates.sort_values(by=['DATE'], ascending=True).reset_index(drop=True)
 
+    # Load model parameters
     ARIMA_params = load_ARIMA_Params(args);
+
+    # Generate predictions
     predictions_df = generate_predictions(rates, ARIMA_params, **load_config)
+
+    # Store predictions in the database
+    engine = get_engine(args)
+    create_Predictions(engine, predictions_df)
+
     return
