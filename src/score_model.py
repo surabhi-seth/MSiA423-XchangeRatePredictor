@@ -11,6 +11,41 @@ import logging.config
 logger = logging.getLogger(__name__)
 
 
+def date_by_adding_business_days(from_date, add_days):
+    business_days_to_add = add_days
+    current_date = from_date
+    while business_days_to_add > 0:
+        current_date += datetime.timedelta(days=1)
+        weekday = current_date.weekday()
+        if weekday >= 5: # sunday = 6
+            continue
+        business_days_to_add -= 1
+    return current_date
+
+
+def generate_predictions(rates, ARIMA_params, FORECAST_PERIOD, **kwargs):
+    """ Generate predictions from the rate data and ARIMA parameters for the forecast period"""
+
+    predictions_df = pd.DataFrame(columns=['currrency', 'date', 'rate'])
+    currencies = ['INR', 'GBP', 'EUR']
+    now = datetime.now()
+
+    for curr in currencies:
+        predictions = ARIMAForecasting(rates[curr], FORECAST_PERIOD,
+                                       ARIMA_params.loc[ARIMA_params['CURRENCY'] == curr, 'P'].values[0],
+                                       ARIMA_params.loc[ARIMA_params['CURRENCY'] == curr, 'D'].values[0],
+                                       ARIMA_params.loc[ARIMA_params['CURRENCY'] == curr, 'Q'].values[0])
+
+        for i in range(FORECAST_PERIOD):
+            next_dt = date_by_adding_business_days(now, (i+1))
+            next_dt = next_dt.strftime("%Y-%m-%d")
+            predictions_df = predictions_df.\
+                append({'currrency': curr, 'date': next_dt, 'rate': predictions[i]}, ignore_index=True)
+
+    print(predictions_df)
+    return predictions_df
+
+
 def score_model(args):
     """ Load the best model parameters and fetch the latest rate data to generate predictions"""
     try:
@@ -46,47 +81,5 @@ def score_model(args):
     rates = rates.sort_values(by=['DATE'], ascending=True).reset_index(drop=True)
 
     ARIMA_params = load_ARIMA_Params(args);
-    generate_predictions(rates, ARIMA_params, **load_config)
+    predictions_df = generate_predictions(rates, ARIMA_params, **load_config)
     return
-
-
-def generate_predictions(rates, ARIMA_params, FORECAST_PERIOD, **kwargs):
-    """ Generate predictions from the rate data and ARIMA parameters for the forecast period"""
-
-    currencies = ['INR', 'GBP', 'EUR']
-    for curr in currencies:
-        predictions = ARIMAForecasting(rates[curr], FORECAST_PERIOD,
-                                       ARIMA_params.loc[ARIMA_params['CURRENCY'] == curr, 'P'].values[0],
-                                       ARIMA_params.loc[ARIMA_params['CURRENCY'] == curr, 'D'].values[0],
-                                       ARIMA_params.loc[ARIMA_params['CURRENCY'] == curr, 'Q'].values[0])
-        print(predictions)
-
-    '''predictions_INR = ARIMAForecasting(rates.INR, FORECAST_PERIOD,
-                                       ARIMA_params.loc[ARIMA_params['CURRENCY'] == 'INR', 'P'].values[0],
-                                       ARIMA_params.loc[ARIMA_params['CURRENCY'] == 'INR', 'D'].values[0],
-                                       ARIMA_params.loc[ARIMA_params['CURRENCY'] == 'INR', 'Q'].values[0])
-    predictions_EUR = ARIMAForecasting(rates.EUR, FORECAST_PERIOD,
-                                       ARIMA_params.loc[ARIMA_params['CURRENCY'] == 'EUR', 'P'].values[0],
-                                       ARIMA_params.loc[ARIMA_params['CURRENCY'] == 'EUR', 'D'].values[0],
-                                       ARIMA_params.loc[ARIMA_params['CURRENCY'] == 'EUR', 'Q'].values[0])
-    predictions_GBP = ARIMAForecasting(rates.GBP, FORECAST_PERIOD,
-                                       ARIMA_params.loc[ARIMA_params['CURRENCY'] == 'GBP', 'P'].values[0],
-                                       ARIMA_params.loc[ARIMA_params['CURRENCY'] == 'GBP', 'D'].values[0],
-                                       ARIMA_params.loc[ARIMA_params['CURRENCY'] == 'GBP', 'Q'].values[0])
-
-    print(predictions_INR)
-    print(predictions_GBP)
-    print(predictions_EUR)'''
-    return
-
-
-def date_by_adding_business_days(from_date, add_days):
-    business_days_to_add = add_days
-    current_date = from_date
-    while business_days_to_add > 0:
-        current_date += datetime.timedelta(days=1)
-        weekday = current_date.weekday()
-        if weekday >= 5: # sunday = 6
-            continue
-        business_days_to_add -= 1
-    return current_date
