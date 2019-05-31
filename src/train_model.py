@@ -25,7 +25,7 @@ def store_best_model(args, models):
     best_EUR_model = models.loc[models['MAPE_EUR'].idxmin()]
 
     # Insert the p,d,q values for the best ARIMA model
-    engine = get_engine(args)
+    engine = get_engine()
     create_ARIMA_Params(engine, "INR", best_INR_model.P, best_INR_model.D, best_INR_model.Q)
     create_ARIMA_Params(engine, "GBP", best_GBP_model.P, best_GBP_model.D, best_GBP_model.Q)
     create_ARIMA_Params(engine, "EUR", best_EUR_model.P, best_EUR_model.D, best_EUR_model.Q)

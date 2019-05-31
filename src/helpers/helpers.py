@@ -125,7 +125,7 @@ def get_session(engine=None, engine_string=None):
     return session
 
 
-def get_engine(args):
+def get_engine():
     '''Creates engine for an RDS or local sqlite database'''
     dbconfig = config.DBCONFIG
     try:

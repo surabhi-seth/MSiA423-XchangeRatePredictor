@@ -50,7 +50,7 @@ def create_db(args):
     """Creates a RDS or a SQLITE database (based on configuration) with ARIMA_Params table
     Returns: None
     """
-    engine = get_engine(args)
+    engine = get_engine()
     try:
         Base.metadata.create_all(engine)
         logger.info("Database created with tables")
@@ -87,6 +87,7 @@ def create_Predictions(engine, df):
         old_Predictions = session.query(Predictions.CURRENCY, Predictions.PRED_DATE, Predictions.PRED_RATE)
         old_Predictions.delete()
 
+        print(df.to_dict(orient="records"))
         session.bulk_insert_mappings(Predictions, df.to_dict(orient="records"))
         session.commit()
     except Exception as e:
