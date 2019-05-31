@@ -13,13 +13,3 @@ MODEL_CONFIG = path.join(PROJECT_HOME, 'config/model_config.yml')
 DB_PATH = path.join(PROJECT_HOME, 'data/XchangeRatePredictor.db')
 SQLALCHEMY_DATABASE_URI = 'sqlite:///{}'.format(DB_PATH)
 SQLALCHEMY_TRACK_MODIFICATIONS = True
-
-
-# Flask config
-HOST = "0.0.0.0" #18.223.248.26
-PORT = 3000
-APP_NAME = "penny-lane"
-
-DEBUG = True
-LOGGING_CONFIG = "config/logging/local.conf"
-

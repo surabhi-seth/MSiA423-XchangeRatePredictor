@@ -1,3 +1,4 @@
+'''
 import logging
 from app import db
 
@@ -5,7 +6,7 @@ logger = logging.getLogger(__name__)
 
 db.Model.metadata.reflect(db.engine)
 
-'''
+
 class Rates(db.Model):
     """Create a data model for the database to be set up for capturing rates
     """
@@ -16,7 +17,7 @@ class Rates(db.Model):
 
     def __repr__(self):
         return '<Rates %r>' % self.DATE
-'''
+
 
 class ARIMA_Params(db.Model):
     """Create a data model for the database to be set up for capturing ARIMA parameters
@@ -28,3 +29,5 @@ class ARIMA_Params(db.Model):
 
     def __repr__(self):
         return '<ARIMA Params %r>' % self.CURRENCY
+
+'''
