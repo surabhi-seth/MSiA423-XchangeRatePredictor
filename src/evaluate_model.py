@@ -9,7 +9,7 @@ ARIMA_models = {
 
 def ARIMAForecasting(ts, FORECAST_PERIOD, P, D, Q):
     model = ARIMA(ts, order=(P, D, Q))
-    model_fit = model.fit(disp=0)
+    model_fit = model.fit(disp=0, maxiter=2000, method='css')
     prediction = model_fit.forecast(steps=FORECAST_PERIOD)[0]
     return prediction
 
