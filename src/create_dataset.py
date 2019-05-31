@@ -44,12 +44,10 @@ def create_db(args):
         sys.exit(1)
 
 
-def create_ARIMA_Params(args, currency, p, d, q):
+def create_ARIMA_Params(engine, currency, p, d, q):
     """Stores ARIMA_Params in the table
         Returns: None
     """
-    engine = get_engine(args)
-
     try:
         session = get_session(engine)
         old_ARIMA_Params = session.query(ARIMA_Params.CURRENCY, ARIMA_Params.P, ARIMA_Params.D, ARIMA_Params.Q).\

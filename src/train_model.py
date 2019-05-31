@@ -9,6 +9,7 @@ from os import path
 from src.load_data import load_raw_source
 from src.create_dataset import create_ARIMA_Params
 from src.evaluate_model import evaluate_model
+from src.helpers.helpers import get_engine
 
 import logging.config
 logger = logging.getLogger(__name__)
@@ -37,11 +38,12 @@ def store_best_model(args, models):
     best_GBP_model = models.loc[models['MAPE_GBP'].idxmin()]
     best_EUR_model = models.loc[models['MAPE_EUR'].idxmin()]
 
-    create_ARIMA_Params(args, "INR", best_INR_model.P, best_INR_model.D, best_INR_model.Q)
-    create_ARIMA_Params(args, "GBP", best_GBP_model.P, best_GBP_model.D, best_GBP_model.Q)
-    create_ARIMA_Params(args, "EUR", best_EUR_model.P, best_EUR_model.D, best_EUR_model.Q)
-
+    engine = get_engine(args)
+    create_ARIMA_Params(engine, "INR", best_INR_model.P, best_INR_model.D, best_INR_model.Q)
+    create_ARIMA_Params(engine, "GBP", best_GBP_model.P, best_GBP_model.D, best_GBP_model.Q)
+    create_ARIMA_Params(engine, "EUR", best_EUR_model.P, best_EUR_model.D, best_EUR_model.Q)
     logger.info("ARIMA Model parameters loaded in the db")
+    
     return
 
 def train_model(args):
