@@ -130,7 +130,9 @@ def get_engine(args):
     dbconfig = config.DBCONFIG
     try:
         if dbconfig is not None:
-            engine = create_connection(dbconfig=config.DBCONFIG, user_env=args.u, password_env=args.p)
+            engine = create_connection(dbconfig=config.DBCONFIG,
+                                       user_env=os.environ.get("MYSQL_USER"),
+                                       password_env=os.environ.get("MYSQL_PASSWORD"))
             logger.info("Accessing RDS database")
         else:
             engine = create_connection(engine_string=config.SQLALCHEMY_DATABASE_URI)
