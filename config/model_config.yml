@@ -7,10 +7,8 @@ acquire_rates:
   S3_FILE_NAME: raw_exchange_rates.txt
 train_model:
   DOWNLOAD_LOCATION: data/raw/exchange_rates_dl.json
-  START_DATE: 2016-04-15
-  END_DATE: 2019-04-15
   FORECAST_PERIOD: 7
 score_model:
   BASE_URL: https://api.exchangeratesapi.io/history
   FORECAST_PERIOD: 7
-  NUM_LOOK_BACK_YRS: 3
+  NUM_LOOK_BACK_YRS: 1

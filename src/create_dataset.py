@@ -7,7 +7,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, MetaData
 from sqlalchemy.orm import sessionmaker
 
-from src.helpers.helpers import create_connection, get_session
+from src.helpers.helpers import create_connection, get_session, get_engine
 
 
 logger = logging.getLogger(__name__)
@@ -29,22 +29,6 @@ class ARIMA_Params(Base):
 
     def __repr__(self):
         return '<ARIMA Params %r>' % self.CURRENCY
-
-def get_engine(args):
-    '''Creates engine for an RDS or local sqlite database'''
-    dbconfig = config.DBCONFIG
-    try:
-        if dbconfig is not None:
-            engine = create_connection(dbconfig=config.DBCONFIG, user_env=args.u, password_env=args.p)
-            logger.info("Accessing RDS database")
-        else:
-            engine = create_connection(engine_string=config.SQLALCHEMY_DATABASE_URI)
-            logger.info("Accessing sqlite database")
-    except Exception as e:
-        logger.error(e)
-        sys.exit(1)
-
-    return engine
 
 
 def create_db(args):
@@ -75,7 +59,6 @@ def create_ARIMA_Params(args, currency, p, d, q):
         params = ARIMA_Params(CURRENCY=currency, P=int(p), D=int(d), Q=int(q))
         session.add(params)
         session.commit()
-        logger.info("ARIMA Model parameters loaded in the db")
     except Exception as e:
         logger.error(e)
         sys.exit(1)

@@ -14,7 +14,8 @@ def ARIMAForecasting(ts, FORECAST_PERIOD, P, D, Q):
     return prediction
 
 
-def evaluate_model(rates, START_DATE, END_DATE, FORECAST_PERIOD, **kwargs):
+def evaluate_model(rates, FORECAST_PERIOD, **kwargs):
+
     #rates = rates.loc[(rates['DATE'] >= START_DATE) & (rates['DATE'] <= END_DATE)]
     models = pd.DataFrame(data=ARIMA_models)
     MAPE_INR = []

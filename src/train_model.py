@@ -40,6 +40,8 @@ def store_best_model(args, models):
     create_ARIMA_Params(args, "INR", best_INR_model.P, best_INR_model.D, best_INR_model.Q)
     create_ARIMA_Params(args, "GBP", best_GBP_model.P, best_GBP_model.D, best_GBP_model.Q)
     create_ARIMA_Params(args, "EUR", best_EUR_model.P, best_EUR_model.D, best_EUR_model.Q)
+
+    logger.info("ARIMA Model parameters loaded in the db")
     return
 
 def train_model(args):

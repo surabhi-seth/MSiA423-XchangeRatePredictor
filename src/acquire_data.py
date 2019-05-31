@@ -6,6 +6,7 @@ import yaml
 import config
 import botocore
 from os import path
+from src.helpers.helpers import invoke_api
 
 import logging.config
 logger = logging.getLogger(__name__)
@@ -31,16 +32,7 @@ def acquire_rates(args):
                                          end_date=end_date)
     logger.debug(api_url)
 
-    try:
-        response = requests.get(api_url)
-        if response.status_code == 200:
-            result = response.json()
-        else:
-            logger.error("API returned with status code: " + str(response.status_code))
-            sys.exit(1)
-    except requests.exceptions.RequestException as e:
-        logger.error("Unable to call the API")
-        sys.exit(1)
+    result = invoke_api(api_url)
 
     # Store the JSON locally first
     file_location = path.join(config.PROJECT_HOME, load_config["RAW_DATA_LOCATION"])

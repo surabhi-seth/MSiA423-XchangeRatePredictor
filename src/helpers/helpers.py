@@ -2,7 +2,10 @@ import os
 import datetime
 import sqlalchemy
 import yaml
+import sys
+import requests
 from sqlalchemy.orm import sessionmaker
+import config
 import logging
 
 logger = logging.getLogger(__name__)
@@ -121,6 +124,36 @@ def get_session(engine=None, engine_string=None):
 
     return session
 
+
+def get_engine(args):
+    '''Creates engine for an RDS or local sqlite database'''
+    dbconfig = config.DBCONFIG
+    try:
+        if dbconfig is not None:
+            engine = create_connection(dbconfig=config.DBCONFIG, user_env=args.u, password_env=args.p)
+            logger.info("Accessing RDS database")
+        else:
+            engine = create_connection(engine_string=config.SQLALCHEMY_DATABASE_URI)
+            logger.info("Accessing sqlite database")
+    except Exception as e:
+        logger.error(e)
+        sys.exit(1)
+
+    return engine
+
+
+def invoke_api(api_url):
+    try:
+        response = requests.get(api_url)
+        if response.status_code == 200:
+            result = response.json()
+        else:
+            logger.error("API returned with status code: " + str(response.status_code))
+            sys.exit(1)
+    except requests.exceptions.RequestException as e:
+        logger.error("Unable to call the API")
+        sys.exit(1)
+    return result
 
 def fillin_kwargs(keywords, kwargs):
     keywords = [keywords] if type(keywords) != list else keywords

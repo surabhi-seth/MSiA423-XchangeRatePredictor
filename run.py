@@ -23,6 +23,7 @@ logger = logging.getLogger("run-penny-lane")
 from src.create_dataset import create_db
 from src.acquire_data import acquire_rates
 from src.train_model import train_model
+from src.score_model import score_model
 #from src.evaluate_model import evaluate_model
 #from src.score_model import score_model
 #from src.postprocess import increment_rate_data
@@ -48,18 +49,11 @@ if __name__ == '__main__':
     sb_train.add_argument("--p", default="", help="Password")
     sb_train.set_defaults(func=train_model)
 
+    # Sub-parser for scoring the model
+    sb_score = subparsers.add_parser("score", description="Score Predictions")
+    sb_score.add_argument("--u", default="", help="Username for connecting to the database")
+    sb_score.add_argument("--p", default="", help="Password")
+    sb_score.set_defaults(func=score_model)
+
     args = parser.parse_args()
     args.func(args)
-
-'''# Sub-parser for scoring the final model
-    sb_increment = subparsers.add_parser("increment", description="Increment Rates Data")
-    sb_increment.set_defaults(func=increment_rate_data)
-
-    # Sub-parser for evaluating models
-    sb_evaluate = subparsers.add_parser("evaluate", description="Evaluate ARIMA Models")
-    sb_evaluate.set_defaults(func=evaluate_model)
-
-    # Sub-parser for scoring the final model
-    sb_score = subparsers.add_parser("score", description="Score ARIMA Models")
-    sb_score.set_defaults(func=score_model)'''
-
