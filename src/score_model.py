@@ -12,6 +12,7 @@ logger = logging.getLogger(__name__)
 
 
 def score_model(args):
+    """ Load the best model parameters and fetch the latest rate data to generate predictions"""
     try:
         with open(config.MODEL_CONFIG, "r") as f:
             model_config = yaml.load(f, Loader=yaml.FullLoader)
@@ -46,9 +47,11 @@ def score_model(args):
 
     ARIMA_params = load_ARIMA_Params(args);
     generate_predictions(rates, ARIMA_params, **load_config)
+    return
 
 
 def generate_predictions(rates, ARIMA_params, FORECAST_PERIOD, **kwargs):
+    """ Generate predictions from the rate data and ARIMA parameters for the forecast period"""
 
     predictions_INR = ARIMAForecasting(rates.INR, FORECAST_PERIOD,
                                        ARIMA_params.loc[ARIMA_params['CURRENCY'] == 'INR', 'P'].values[0],
@@ -66,3 +69,4 @@ def generate_predictions(rates, ARIMA_params, FORECAST_PERIOD, **kwargs):
     print(predictions_INR)
     print(predictions_GBP)
     print(predictions_EUR)
+    return

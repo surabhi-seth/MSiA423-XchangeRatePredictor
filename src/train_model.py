@@ -6,7 +6,7 @@ import yaml
 import config
 import pandas as pd
 from os import path
-from src.load_data import load_raw_source
+from src.load_data import load_raw_source, read_records
 from src.create_dataset import create_ARIMA_Params
 from src.evaluate_model import evaluate_model
 from src.helpers.helpers import get_engine
@@ -15,29 +15,16 @@ import logging.config
 logger = logging.getLogger(__name__)
 
 
-def read_records(file_location):
-    try:
-        if not file_location:
-            raise FileNotFoundError
-
-        with open(file_location, 'r+') as input_file:
-            try:
-                output_records = json.load(input_file)
-            except json.decoder.JSONDecodeError:
-                logger.error("Could not decode JSON")
-    except FileNotFoundError:
-        logger.error("Source data file not found")
-        sys.exit(1)
-
-    return output_records
-
 
 def store_best_model(args, models):
-    # Insert the p,d,q values for the best ARIMA model
+    """ Determine the best model from the MAPE values and store its parameters in the databse a"""
+
+    # Find the best model for INR, GBP and EUR
     best_INR_model = models.loc[models['MAPE_INR'].idxmin()]
     best_GBP_model = models.loc[models['MAPE_GBP'].idxmin()]
     best_EUR_model = models.loc[models['MAPE_EUR'].idxmin()]
 
+    # Insert the p,d,q values for the best ARIMA model
     engine = get_engine(args)
     create_ARIMA_Params(engine, "INR", best_INR_model.P, best_INR_model.D, best_INR_model.Q)
     create_ARIMA_Params(engine, "GBP", best_GBP_model.P, best_GBP_model.D, best_GBP_model.Q)
@@ -47,6 +34,13 @@ def store_best_model(args, models):
     return
 
 def train_model(args):
+    """
+    Orchestrates the following steps:
+    1. Fetch the source data from S3 bucket
+    2. Evaluate the best ARIMA model for INR, GBP and EUR
+    3. Store the model params for the best model
+    """
+
     try:
         with open(config.MODEL_CONFIG, "r") as f:
             model_config = yaml.load(f, Loader=yaml.FullLoader)

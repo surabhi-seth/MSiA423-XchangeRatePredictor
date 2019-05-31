@@ -12,6 +12,7 @@ logger = logging.getLogger(__name__)
 
 
 def load_ARIMA_Params(args):
+    """ Load p,d,q parameters corresponding to the best ARIMA models from the database """
     engine = get_engine(args)
 
     try:
@@ -24,7 +25,26 @@ def load_ARIMA_Params(args):
     return ARIMA_Params;
 
 
+def read_records(file_location):
+    """ Read and load JSON from the local filesystem """
+    try:
+        if not file_location:
+            raise FileNotFoundError
+
+        with open(file_location, 'r+') as input_file:
+            try:
+                output_records = json.load(input_file)
+            except json.decoder.JSONDecodeError:
+                logger.error("Could not decode JSON")
+    except FileNotFoundError:
+        logger.error("Source data file not found")
+        sys.exit(1)
+
+    return output_records
+
+
 def load_raw_source(local_results_file):
+    """ Fetch the source data stored in S3 bucket """
     try:
         with open(config.MODEL_CONFIG, "r") as f:
             model_config = yaml.load(f, Loader=yaml.FullLoader)

@@ -1,3 +1,4 @@
+'''
 from app import db
 from app.models import Rates
 from src.load_data import get_latest_rates
@@ -31,3 +32,4 @@ def increment_rate_data():
     rates = rates.sort_values(by=['DATE'], ascending=True).reset_index(drop=True)
     db.session.bulk_insert_mappings(Rates, rates.to_dict(orient="records"))
     db.session.commit()
+'''
