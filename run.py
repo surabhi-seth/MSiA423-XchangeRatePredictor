@@ -39,20 +39,14 @@ if __name__ == '__main__':
 
     # Sub-parser for creating a database
     sb_create = subparsers.add_parser("create_db", description="Create rates database")
-    #sb_create.add_argument("--u", default="", help="Username for connecting to the database")
-    #sb_create.add_argument("--p", default="", help="Password")
     sb_create.set_defaults(func=create_db)
 
     # Sub-parser for training the model
     sb_train = subparsers.add_parser("train", description="Train ARIMA models")
-    #sb_train.add_argument("--u", default="", help="Username for connecting to the database")
-    #sb_train.add_argument("--p", default="", help="Password")
     sb_train.set_defaults(func=train_model)
 
     # Sub-parser for scoring the model
     sb_score = subparsers.add_parser("score", description="Score Predictions")
-    #sb_score.add_argument("--u", default="", help="Username for connecting to the database")
-    #sb_score.add_argument("--p", default="", help="Password")
     sb_score.set_defaults(func=score_model)
 
     args = parser.parse_args()

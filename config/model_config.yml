@@ -1,7 +1,7 @@
 acquire_rates:
   BASE_URL: https://api.exchangeratesapi.io/history
-  START_DATE: 2016-04-15
-  END_DATE: 2019-04-15
+  START_DATE: 2017-05-30
+  END_DATE: 2019-05-30
   RAW_DATA_LOCATION: data/raw/raw_exchange_rates.json
   S3_LOCATION: nw-surabhiseth-s3
   S3_FILE_NAME: raw_exchange_rates.txt
@@ -11,4 +11,4 @@ train_model:
 score_model:
   BASE_URL: https://api.exchangeratesapi.io/history
   FORECAST_PERIOD: 7
-  NUM_LOOK_BACK_YRS: 1
+  NUM_LOOK_BACK_YRS: 2
