@@ -29,8 +29,8 @@ def index():
     """
 
     try:
-        preds = db.session.query(Predictions).limit(app.config["MAX_ROWS_SHOW"]).all()
-        logger.debug("Index page accessed")
+        preds = db.session.query(Predictions).limit(100).all()
+        logger.info("Index page accessed")
         return render_template('index.html', predictions=preds)
     except:
         logger.warning("Not able to display tracks, error page returned")

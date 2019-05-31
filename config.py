@@ -12,4 +12,3 @@ MODEL_CONFIG = path.join(PROJECT_HOME, 'config/model_config.yml')
 # The SQLALCHEMY_DATABASE_URI parameter is considered ONLY if DBCONFIG is set as None. Else it is ignored.
 DB_PATH = path.join(PROJECT_HOME, 'data/XchangeRatePredictor.db')
 SQLALCHEMY_DATABASE_URI = 'sqlite:///{}'.format(DB_PATH)
-SQLALCHEMY_TRACK_MODIFICATIONS = True
