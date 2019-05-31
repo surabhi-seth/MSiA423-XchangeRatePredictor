@@ -4,7 +4,7 @@ import yaml
 import sys
 
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String, MetaData
+from sqlalchemy import Column, Integer, String, Float, MetaData
 from sqlalchemy.orm import sessionmaker
 
 from src.helpers.helpers import create_connection, get_session, get_engine
@@ -29,6 +29,21 @@ class ARIMA_Params(Base):
 
     def __repr__(self):
         return '<ARIMA Params %r>' % self.CURRENCY
+
+
+class Predictions(Base):
+    """
+        Create data model for the database for capturing predictions
+        """
+
+    __tablename__ = 'Predictions'
+
+    CURRENCY = Column(String(10), primary_key=True)
+    PRED_DATE = Column(String(20), primary_key=True)
+    PRED_RATE = Column(Float, unique=False, nullable=False)
+
+    def __repr__(self):
+        return '<Predictions %r, %r>' % self.CURRENCY, self.PRED_DATE
 
 
 def create_db(args):
