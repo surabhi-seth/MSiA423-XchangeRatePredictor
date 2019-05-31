@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 def score_model(args):
     try:
         with open(config.MODEL_CONFIG, "r") as f:
-            model_config = yaml.load(f)
+            model_config = yaml.load(f, Loader=yaml.FullLoader)
     except FileNotFoundError:
         logger.error("YAML not found")
         sys.exit(1)

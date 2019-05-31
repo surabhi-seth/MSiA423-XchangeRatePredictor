@@ -17,7 +17,7 @@ def acquire_rates(args):
     """
     try:
         with open(config.MODEL_CONFIG, "r") as f:
-            model_config = yaml.load(f)
+            model_config = yaml.load(f, Loader=yaml.FullLoader)
     except FileNotFoundError:
         logger.error("YAML not found")
         sys.exit(1)

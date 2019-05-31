@@ -85,7 +85,7 @@ def create_connection(host='127.0.0.1', database="", sqltype="mysql+pymysql", po
     if engine_string is None:
         if dbconfig is not None:
             with open(dbconfig, "r") as f:
-                db = yaml.load(f)
+                db = yaml.load(f, Loader=yaml.FullLoader)
 
             host = db["host"]
             database = ifin("dbname", db, "")
