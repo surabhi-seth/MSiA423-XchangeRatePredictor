@@ -43,7 +43,7 @@ def store_best_model(args, models):
     create_ARIMA_Params(engine, "GBP", best_GBP_model.P, best_GBP_model.D, best_GBP_model.Q)
     create_ARIMA_Params(engine, "EUR", best_EUR_model.P, best_EUR_model.D, best_EUR_model.Q)
     logger.info("ARIMA Model parameters loaded in the db")
-    
+
     return
 
 def train_model(args):
@@ -56,8 +56,6 @@ def train_model(args):
 
     load_config = model_config["train_model"]
     local_results_file = load_config["DOWNLOAD_LOCATION"]
-    #load_raw_source(local_results_file)
-
     data = read_records(local_results_file)
 
     dates_list = list(data['rates'].keys())
@@ -70,6 +68,7 @@ def train_model(args):
 
     rates = pd.DataFrame(data=inputs)
     rates = rates.sort_values(by=['DATE'], ascending=True).reset_index(drop=True)
-    #print(rates.head(5))
+
     models = evaluate_model(rates, **load_config)
     store_best_model(args, models)
+    return

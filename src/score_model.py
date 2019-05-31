@@ -11,7 +11,7 @@ import logging.config
 logger = logging.getLogger(__name__)
 
 
-def score_model():
+def score_model(args):
     try:
         with open(config.MODEL_CONFIG, "r") as f:
             model_config = yaml.load(f)
@@ -19,13 +19,13 @@ def score_model():
         logger.error("YAML not found")
         sys.exit(1)
 
+    load_config = model_config["score_model"]
     now = datetime.now()
     end_date = now.strftime("%Y-%m-%d")
     start_date = now - timedelta(days = load_config["NUM_LOOK_BACK_YRS"] * 365)
     start_date = start_date.strftime("%Y-%m-%d")
 
     # Construct the API URL from the configs set in the yaml
-    load_config = model_config["score_model"]
     base_url = load_config["BASE_URL"]
     api_url = "{base_url}?start_at={start_date}&end_at={end_date}&base=USD"
     api_url = api_url.format(base_url=base_url, start_date=start_date,
@@ -44,7 +44,7 @@ def score_model():
     rates = pd.DataFrame(data=inputs)
     rates = rates.sort_values(by=['DATE'], ascending=True).reset_index(drop=True)
 
-    ARIMA_params = load_ARIMA_Params();
+    ARIMA_params = load_ARIMA_Params(args);
     generate_predictions(rates, ARIMA_params, **load_config)
 
 

@@ -18,16 +18,16 @@ def load_ARIMA_Params(args):
     engine = get_engine(args)
 
     try:
-        session = get_session(engine)
-        model_params = session.query(ARIMA_Params.CURRENCY, ARIMA_Params.P, ARIMA_Params.D, ARIMA_Params.Q)
+        query = "SELECT * FROM ARIMA_Params"
+        model_params = pd.read_sql(query, con=engine)
+        print(model_params)
+        #model_params = session.query(ARIMA_Params.CURRENCY, ARIMA_Params.P, ARIMA_Params.D, ARIMA_Params.Q)
     except Exception as e:
         logger.error(e)
         sys.exit(1)
-    finally:
-        session.close()
 
-    #ARIMAParams = pd.read_sql_query("select * from ARIMA_Params", con=db.engine);
     return model_params;
+
 
 def load_raw_source(local_results_file):
     try:
