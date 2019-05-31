@@ -87,7 +87,6 @@ def create_Predictions(engine, df):
         old_Predictions = session.query(Predictions.CURRENCY, Predictions.PRED_DATE, Predictions.PRED_RATE)
         old_Predictions.delete()
 
-        print(df.to_dict(orient="records"))
         session.bulk_insert_mappings(Predictions, df.to_dict(orient="records"))
         session.commit()
     except Exception as e:
@@ -95,4 +94,5 @@ def create_Predictions(engine, df):
         sys.exit(1)
     finally:
         session.close()
+        logger.info("Predictions stored in the database")
         return

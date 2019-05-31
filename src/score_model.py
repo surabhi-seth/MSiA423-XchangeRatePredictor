@@ -82,13 +82,12 @@ def score_model(args):
     rates = rates.sort_values(by=['DATE'], ascending=True).reset_index(drop=True)
 
     # Load model parameters
-    ARIMA_params = load_ARIMA_Params();
+    engine = get_engine()
+    ARIMA_params = load_ARIMA_Params(engine);
 
     # Generate predictions
     predictions_df = generate_predictions(rates, ARIMA_params, **load_config)
 
     # Store predictions in the database
-    engine = get_engine()
     create_Predictions(engine, predictions_df)
-
     return

@@ -11,9 +11,8 @@ import logging.config
 logger = logging.getLogger(__name__)
 
 
-def load_ARIMA_Params():
+def load_ARIMA_Params(engine):
     """ Load p,d,q parameters corresponding to the best ARIMA models from the database """
-    engine = get_engine()
 
     try:
         query = "SELECT * FROM ARIMA_Params"
