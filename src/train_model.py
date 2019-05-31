@@ -56,6 +56,7 @@ def train_model(args):
 
     load_config = model_config["train_model"]
     local_results_file = load_config["DOWNLOAD_LOCATION"]
+    load_raw_source(local_results_file)
     data = read_records(local_results_file)
 
     dates_list = list(data['rates'].keys())
