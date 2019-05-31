@@ -27,7 +27,7 @@ def date_by_adding_business_days(from_date, add_days):
 def generate_predictions(rates, ARIMA_params, FORECAST_PERIOD, **kwargs):
     """ Generate predictions from the rate data and ARIMA parameters for the forecast period"""
 
-    predictions_df = pd.DataFrame(columns=['currrency', 'date', 'rate'])
+    predictions_df = pd.DataFrame(columns=['CURRENCY', 'PRED_DATE', 'PRED_RATE'])
     currencies = ['INR', 'GBP', 'EUR']
     now = datetime.now()
 
@@ -41,7 +41,7 @@ def generate_predictions(rates, ARIMA_params, FORECAST_PERIOD, **kwargs):
             next_dt = date_by_adding_business_days(now, (i+1))
             next_dt = next_dt.strftime("%Y-%m-%d")
             predictions_df = predictions_df.\
-                append({'currrency': curr, 'date': next_dt, 'rate': predictions[i]}, ignore_index=True)
+                append({'CURRENCY': curr, 'PRED_DATE': next_dt, 'PRED_RATE': predictions[i]}, ignore_index=True)
 
     #print(predictions_df)
     return predictions_df
