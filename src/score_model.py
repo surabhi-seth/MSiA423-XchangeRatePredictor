@@ -53,7 +53,15 @@ def score_model(args):
 def generate_predictions(rates, ARIMA_params, FORECAST_PERIOD, **kwargs):
     """ Generate predictions from the rate data and ARIMA parameters for the forecast period"""
 
-    predictions_INR = ARIMAForecasting(rates.INR, FORECAST_PERIOD,
+    currencies = ['INR', 'GBP', 'EUR']
+    for curr in currencies:
+        predictions = ARIMAForecasting(rates[curr], FORECAST_PERIOD,
+                                       ARIMA_params.loc[ARIMA_params['CURRENCY'] == curr, 'P'].values[0],
+                                       ARIMA_params.loc[ARIMA_params['CURRENCY'] == curr, 'D'].values[0],
+                                       ARIMA_params.loc[ARIMA_params['CURRENCY'] == curr, 'Q'].values[0])
+        print(predictions)
+
+    '''predictions_INR = ARIMAForecasting(rates.INR, FORECAST_PERIOD,
                                        ARIMA_params.loc[ARIMA_params['CURRENCY'] == 'INR', 'P'].values[0],
                                        ARIMA_params.loc[ARIMA_params['CURRENCY'] == 'INR', 'D'].values[0],
                                        ARIMA_params.loc[ARIMA_params['CURRENCY'] == 'INR', 'Q'].values[0])
@@ -68,5 +76,17 @@ def generate_predictions(rates, ARIMA_params, FORECAST_PERIOD, **kwargs):
 
     print(predictions_INR)
     print(predictions_GBP)
-    print(predictions_EUR)
+    print(predictions_EUR)'''
     return
+
+
+def date_by_adding_business_days(from_date, add_days):
+    business_days_to_add = add_days
+    current_date = from_date
+    while business_days_to_add > 0:
+        current_date += datetime.timedelta(days=1)
+        weekday = current_date.weekday()
+        if weekday >= 5: # sunday = 6
+            continue
+        business_days_to_add -= 1
+    return current_date

@@ -77,3 +77,21 @@ def create_ARIMA_Params(engine, currency, p, d, q):
     finally:
         session.close()
         return
+
+
+def create_Predictions(engine, df):
+    """ Stores Predictions in the database """
+
+    try:
+        session = get_session(engine)
+        old_Predictions = session.query(Predictions.CURRENCY, Predictions.PRED_DATE, Predictions.PRED_RATE)
+        old_Predictions.delete()
+
+        session.bulk_insert_mappings(Predictions, df.to_dict(orient="records"))
+        session.commit()
+    except Exception as e:
+        logger.error(e)
+        sys.exit(1)
+    finally:
+        session.close()
+        return
