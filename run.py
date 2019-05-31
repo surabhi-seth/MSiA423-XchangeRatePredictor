@@ -16,17 +16,19 @@ To acquire the exchange rate data:
 
 import argparse
 import logging.config
+from app.app import app
 
-logging.config.fileConfig("config/logging/local.conf")
+logging.config.fileConfig(app.config["LOGGING_CONFIG"])
 logger = logging.getLogger("run-penny-lane")
 
 from src.create_dataset import create_db
 from src.acquire_data import acquire_rates
 from src.train_model import train_model
 from src.score_model import score_model
-#from src.evaluate_model import evaluate_model
-#from src.score_model import score_model
-#from src.postprocess import increment_rate_data
+
+
+def run_app(args):
+    app.run(debug=app.config["DEBUG"], port=app.config["PORT"], host=app.config["HOST"])
 
 
 if __name__ == '__main__':
@@ -48,6 +50,10 @@ if __name__ == '__main__':
     # Sub-parser for scoring the model
     sb_score = subparsers.add_parser("score", description="Score Predictions")
     sb_score.set_defaults(func=score_model)
+
+    # Sub-parser for running flask app
+    sb_run = subparsers.add_parser("app", description="Run Flask app")
+    sb_run.set_defaults(func=run_app)
 
     args = parser.parse_args()
     args.func(args)
