@@ -9,9 +9,7 @@ from sqlalchemy.orm import sessionmaker
 
 from src.helpers.helpers import create_connection, get_session, get_engine
 
-
 logger = logging.getLogger(__name__)
-logger.setLevel("INFO")
 
 Base = declarative_base()
 

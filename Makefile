@@ -23,4 +23,8 @@ score_model:
 	. ${HOME}/pennylane/bin/activate; python run.py score
 
 
+app:
+    . ${HOME}/pennylane/bin/activate; python run.py app
+
+
 all: venv create_db acquire_rates train_model score_model
