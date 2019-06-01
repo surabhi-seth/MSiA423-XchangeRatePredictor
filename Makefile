@@ -23,7 +23,7 @@ score_model:
 	. ${HOME}/pennylane/bin/activate; python run.py score
 
 
-app:
+webapp:
 	. ${HOME}/pennylane/bin/activate; python run.py app
 
 
