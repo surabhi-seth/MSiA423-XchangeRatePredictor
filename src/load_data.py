@@ -47,8 +47,8 @@ def load_raw_source(local_results_file):
     try:
         with open(config.MODEL_CONFIG, "r") as f:
             model_config = yaml.load(f, Loader=yaml.FullLoader)
-    except FileNotFoundError:
-        logger.error("YAML not found")
+    except Exception as e:
+        logger.error(e)
         sys.exit(1)
 
     # Get raw data from S3 bucket

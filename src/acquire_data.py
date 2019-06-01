@@ -18,8 +18,8 @@ def acquire_rates(args):
     try:
         with open(config.MODEL_CONFIG, "r") as f:
             model_config = yaml.load(f, Loader=yaml.FullLoader)
-    except FileNotFoundError:
-        logger.error("YAML not found")
+    except Exception as e:
+        logger.error(e)
         sys.exit(1)
 
     # Construct the API URL from the configs set in the yaml

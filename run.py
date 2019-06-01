@@ -15,17 +15,16 @@ To acquire the exchange rate data:
 """
 
 import argparse
-import logging.config
-from app.app import app
 
-logging.config.fileConfig(app.config["LOGGING_CONFIG"])
+import logging.config
+logging.config.fileConfig("config/logging/local.conf")
 logger = logging.getLogger("run-penny-lane")
 
 from src.create_dataset import create_db
 from src.acquire_data import acquire_rates
 from src.train_model import train_model
 from src.score_model import score_model
-
+from app.app import app
 
 def run_app(args):
     app.run(debug=app.config["DEBUG"], port=app.config["PORT"], host=app.config["HOST"])

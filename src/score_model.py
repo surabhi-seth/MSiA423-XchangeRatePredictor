@@ -52,8 +52,8 @@ def score_model(args):
     try:
         with open(config.MODEL_CONFIG, "r") as f:
             model_config = yaml.load(f, Loader=yaml.FullLoader)
-    except FileNotFoundError:
-        logger.error("YAML not found")
+    except Exception as e:
+        logger.error(e)
         sys.exit(1)
 
     load_config = model_config["score_model"]
