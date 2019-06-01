@@ -7,28 +7,20 @@ ${HOME}/pennylane/bin/activate: requirements.txt
 venv: ${HOME}/pennylane/bin/activate
 
 
-src/create_dataset.py: config/dbconfig.yml config.py
+create_db:
 	. ${HOME}/pennylane/bin/activate; python run.py create_db
 
-create_db: src/create_dataset.py
 
-
-data/raw/raw_exchange_rates.json: config/model_config.yml
+acquire_rates:
 	. ${HOME}/pennylane/bin/activate; python run.py acquire
 
-acquire_rates: data/raw/raw_exchange_rates.json
 
-
-data/raw/exchange_rates_dl.json: config/model_config.yml
+train_model:
 	. ${HOME}/pennylane/bin/activate; python run.py train
 
-train_model: data/raw/exchange_rates_dl.json
 
-
-data/raw/exchange_rates_dl.json: config/model_config.yml
+score_model:
 	. ${HOME}/pennylane/bin/activate; python run.py score
-
-score_model: data/raw/exchange_rates_dl.json
 
 
 all: venv create_db acquire_rates train_model score_model
