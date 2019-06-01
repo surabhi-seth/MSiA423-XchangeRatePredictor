@@ -1,7 +1,7 @@
 
 ${HOME}/pennylane/bin/activate: requirements.txt
 	test -d ${HOME}/pennylane || virtualenv ${HOME}/pennylane
-		. ${HOME}/pennylane/bin/activate; pip install -r requirements.txt
+	. ${HOME}/pennylane/bin/activate; pip install -r requirements.txt
 	touch ${HOME}/pennylane/bin/activate
 
 venv: ${HOME}/pennylane/bin/activate
