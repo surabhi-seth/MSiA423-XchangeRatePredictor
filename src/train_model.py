@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 
 
 
-def store_best_model(args, models):
+def store_best_model(models):
     """ Determine the best model from the MAPE values and store its parameters in the databse a"""
 
     # Find the best model for INR, GBP and EUR
@@ -65,5 +65,5 @@ def train_model(args):
     rates = rates.sort_values(by=['DATE'], ascending=True).reset_index(drop=True)
 
     models = evaluate_model(rates, **load_config)
-    store_best_model(args, models)
+    store_best_model(models)
     return

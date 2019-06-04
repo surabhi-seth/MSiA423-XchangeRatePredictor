@@ -43,7 +43,6 @@ def generate_predictions(rates, ARIMA_params, FORECAST_PERIOD, **kwargs):
             predictions_df = predictions_df.\
                 append({'CURRENCY': curr, 'PRED_DATE': next_dt, 'PRED_RATE': predictions[i]}, ignore_index=True)
 
-    #print(predictions_df)
     return predictions_df
 
 

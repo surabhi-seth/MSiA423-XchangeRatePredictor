@@ -8,6 +8,25 @@ acquire_rates:
 train_model:
   DOWNLOAD_LOCATION: data/raw/exchange_rates_dl.json
   FORECAST_PERIOD: 7
+  ARIMA_models:
+    P:
+      - 1
+      - 0
+      - 0
+      - 2
+      - 0
+    D:
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+    Q:
+      - 0
+      - 0
+      - 1
+      - 0
+      - 2
 score_model:
   BASE_URL: https://api.exchangeratesapi.io/history
   FORECAST_PERIOD: 7

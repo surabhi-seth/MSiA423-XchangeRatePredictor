@@ -1,11 +1,12 @@
 from statsmodels.tsa.arima_model import ARIMA
 import pandas as pd
 
+'''
 ARIMA_models = {
         'P': [1, 0, 0, 2, 0],
         'D': [1, 1, 1, 1, 1],
         'Q': [0, 0, 1, 0, 2]
-    }
+    }'''
 
 def ARIMAForecasting(ts, FORECAST_PERIOD, P, D, Q):
     """ Runs ARIMA for the p,d,q parameters on the time series and generates predictions for the forecast period """
@@ -16,7 +17,7 @@ def ARIMAForecasting(ts, FORECAST_PERIOD, P, D, Q):
     return prediction
 
 
-def evaluate_model(rates, FORECAST_PERIOD, **kwargs):
+def evaluate_model(rates, FORECAST_PERIOD, ARIMA_models, **kwargs):
     """
     Evaluates different ARIMA models and returns corresponding MAPE values
     :param rates: Exchange rate data
@@ -24,7 +25,7 @@ def evaluate_model(rates, FORECAST_PERIOD, **kwargs):
     :param kwargs: yaml config
     :return: Different ARIMA models with corresponding MAPE values from training
     """
-
+    print(ARIMA_models)
     models = pd.DataFrame(data=ARIMA_models)
     MAPE_INR = []
     MAPE_EUR = []
