@@ -21,6 +21,13 @@ def test_evaluate_model():
         'INR': [69.27, 69.30, 69.98, 69.56, 69.24, 69.11, 69.32, 69.41, 69.64, 69.83, 69.44, 69.22],
     }
 
+    '''
+    ARIMA_models = {
+            'P': [1, 0, 0, 2, 0],
+            'D': [1, 1, 1, 1, 1],
+            'Q': [0, 0, 1, 0, 2]
+        }
+    '''
     time_slice_input = pd.DataFrame(data=inputs)
 
     expected = {

@@ -24,18 +24,18 @@ def find_best_model(models):
     # Find the best model for INR, GBP and EUR
     best_INR_model = models.loc[models['MAPE_INR'].idxmin()]
     best_models = best_models.\
-        append({'CURRENCY': 'INR', 'P': best_INR_model.P, 'D': best_INR_model.D, 'Q': best_INR_model.Q},
-               ignore_index=True)
+        append({'CURRENCY': 'INR', 'P': best_INR_model.P, 'D': best_INR_model.D, 'Q': best_INR_model.Q,
+                'MAPE': best_INR_model.MAPE_INR}, ignore_index=True)
 
     best_GBP_model = models.loc[models['MAPE_GBP'].idxmin()]
     best_models = best_models. \
-        append({'CURRENCY': 'GBP', 'P': best_GBP_model.P, 'D': best_GBP_model.D, 'Q': best_GBP_model.Q},
-               ignore_index=True)
+        append({'CURRENCY': 'GBP', 'P': best_GBP_model.P, 'D': best_GBP_model.D, 'Q': best_GBP_model.Q,
+                'MAPE': best_GBP_model.MAPE_GBP}, ignore_index=True)
 
     best_EUR_model = models.loc[models['MAPE_EUR'].idxmin()]
     best_models = best_models. \
-        append({'CURRENCY': 'EUR', 'P': best_EUR_model.P, 'D': best_EUR_model.D, 'Q': best_EUR_model.Q},
-               ignore_index=True)
+        append({'CURRENCY': 'EUR', 'P': best_EUR_model.P, 'D': best_EUR_model.D, 'Q': best_EUR_model.Q,
+               'MAPE': best_EUR_model.MAPE_EUR}, ignore_index=True)
 
     return best_models
 
@@ -83,5 +83,5 @@ def train_model(args):
 
     # Insert the p,d,q values for the best ARIMA model
     store_best_models(best_models)
-    
+
     return

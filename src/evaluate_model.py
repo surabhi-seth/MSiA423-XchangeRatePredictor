@@ -1,34 +1,11 @@
 from statsmodels.tsa.arima_model import ARIMA
 import pandas as pd
 
-'''
-ARIMA_models = {
-        'P': [1, 0, 0, 2, 0],
-        'D': [1, 1, 1, 1, 1],
-        'Q': [0, 0, 1, 0, 2]
-    }
 
-0, 0, 1
-0, 1, 0
-1, 0, 0
-0, 1, 1
-1, 0, 1
-1, 1, 0
-1, 1, 1
-
-2, 0, 0
-0, 2, 0
-0, 0, 2
-
-2, 1, 0
-2, 0, 1
-0, 2, 1
-
-1, 0, 2'''
 
 def ARIMAForecasting(ts, FORECAST_PERIOD, P, D, Q):
     """ Runs ARIMA for the p,d,q parameters on the time series and generates predictions for the forecast period """
-    print(P, D, Q)
+
     model = ARIMA(ts, order=(P, D, Q))
     model_fit = model.fit(disp=0, maxiter=2000, method='css')
     prediction = model_fit.forecast(steps=FORECAST_PERIOD)[0]
