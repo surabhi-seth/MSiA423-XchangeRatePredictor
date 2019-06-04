@@ -57,17 +57,15 @@ def create_db(args):
         sys.exit(1)
 
 
-def create_ARIMA_Params(engine, currency, p, d, q):
+def create_ARIMA_Params(engine, df):
     """ Stores ARIMA_Params in the database """
 
     try:
         session = get_session(engine)
-        old_ARIMA_Params = session.query(ARIMA_Params.CURRENCY, ARIMA_Params.P, ARIMA_Params.D, ARIMA_Params.Q).\
-            filter_by(CURRENCY=currency)
+        old_ARIMA_Params = session.query(ARIMA_Params.CURRENCY, ARIMA_Params.P, ARIMA_Params.D, ARIMA_Params.Q)
         old_ARIMA_Params.delete()
 
-        params = ARIMA_Params(CURRENCY=currency, P=int(p), D=int(d), Q=int(q))
-        session.add(params)
+        session.bulk_insert_mappings(ARIMA_Params, df.to_dict(orient="records"))
         session.commit()
     except Exception as e:
         logger.error(e)

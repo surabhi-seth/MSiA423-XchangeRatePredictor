@@ -16,22 +16,35 @@ logger = logging.getLogger(__name__)
 
 
 
-def store_best_model(models):
+def find_best_model(models):
     """ Determine the best model from the MAPE values and store its parameters in the databse a"""
+
+    best_models = pd.DataFrame(columns=['CURRENCY', 'P', 'D', 'Q'])
 
     # Find the best model for INR, GBP and EUR
     best_INR_model = models.loc[models['MAPE_INR'].idxmin()]
-    best_GBP_model = models.loc[models['MAPE_GBP'].idxmin()]
-    best_EUR_model = models.loc[models['MAPE_EUR'].idxmin()]
+    best_models = best_models.\
+        append({'CURRENCY': 'INR', 'P': best_INR_model.P, 'D': best_INR_model.D, 'Q': best_INR_model.Q},
+               ignore_index=True)
 
-    # Insert the p,d,q values for the best ARIMA model
+    best_GBP_model = models.loc[models['MAPE_GBP'].idxmin()]
+    best_models = best_models. \
+        append({'CURRENCY': 'GBP', 'P': best_GBP_model.P, 'D': best_GBP_model.D, 'Q': best_GBP_model.Q},
+               ignore_index=True)
+
+    best_EUR_model = models.loc[models['MAPE_EUR'].idxmin()]
+    best_models = best_models. \
+        append({'CURRENCY': 'EUR', 'P': best_EUR_model.P, 'D': best_EUR_model.D, 'Q': best_EUR_model.Q},
+               ignore_index=True)
+
+    return best_models
+
+
+def store_best_models(df):
     engine = get_engine()
-    create_ARIMA_Params(engine, "INR", best_INR_model.P, best_INR_model.D, best_INR_model.Q)
-    create_ARIMA_Params(engine, "GBP", best_GBP_model.P, best_GBP_model.D, best_GBP_model.Q)
-    create_ARIMA_Params(engine, "EUR", best_EUR_model.P, best_EUR_model.D, best_EUR_model.Q)
+    create_ARIMA_Params(engine, df)
     logger.info("ARIMA Model parameters loaded in the db")
 
-    return
 
 def train_model(args):
     """
@@ -65,5 +78,10 @@ def train_model(args):
     rates = rates.sort_values(by=['DATE'], ascending=True).reset_index(drop=True)
 
     models = evaluate_model(rates, **load_config)
-    store_best_model(models)
+
+    best_models = find_best_model(models)
+
+    # Insert the p,d,q values for the best ARIMA model
+    store_best_models(best_models)
+    
     return
