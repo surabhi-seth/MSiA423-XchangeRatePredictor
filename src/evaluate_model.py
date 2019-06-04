@@ -28,7 +28,7 @@ ARIMA_models = {
 
 def ARIMAForecasting(ts, FORECAST_PERIOD, P, D, Q):
     """ Runs ARIMA for the p,d,q parameters on the time series and generates predictions for the forecast period """
-
+    print(P, D, Q)
     model = ARIMA(ts, order=(P, D, Q))
     model_fit = model.fit(disp=0, maxiter=2000, method='css')
     prediction = model_fit.forecast(steps=FORECAST_PERIOD)[0]
@@ -43,7 +43,6 @@ def evaluate_model(rates, FORECAST_PERIOD, ARIMA_models, **kwargs):
     :param kwargs: yaml config
     :return: Different ARIMA models with corresponding MAPE values from training
     """
-    print(ARIMA_models)
     models = pd.DataFrame(data=ARIMA_models)
     MAPE_INR = []
     MAPE_EUR = []
