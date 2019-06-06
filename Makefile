@@ -27,4 +27,8 @@ webapp:
 	. ${HOME}/pennylane/bin/activate; python run.py app
 
 
-all: venv create_db acquire_rates train_model score_model
+tests:
+	. ${HOME}/pennylane/bin/activate; pytest ./test/test_helpers.py
+
+
+all: venv create_db acquire_rates train_model score_model tests

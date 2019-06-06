@@ -37,6 +37,8 @@ def find_best_model(models):
         append({'CURRENCY': 'EUR', 'P': best_EUR_model.P, 'D': best_EUR_model.D, 'Q': best_EUR_model.Q,
                'MAPE': best_EUR_model.MAPE_EUR}, ignore_index=True)
 
+    best_models = best_models.sort_values(by=['CURRENCY'], ascending=True).reset_index(drop=True)
+
     return best_models
 
 

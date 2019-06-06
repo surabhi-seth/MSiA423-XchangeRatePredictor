@@ -28,7 +28,7 @@ def generate_predictions(rates, ARIMA_params, FORECAST_PERIOD, **kwargs):
     """ Generate predictions from the rate data and ARIMA parameters for the forecast period"""
 
     predictions_df = pd.DataFrame(columns=['CURRENCY', 'PRED_DATE', 'PRED_RATE'])
-    currencies = ['INR', 'GBP', 'EUR']
+    currencies = ['EUR', 'GBP', 'INR']
     now = datetime.now()
 
     for curr in currencies:

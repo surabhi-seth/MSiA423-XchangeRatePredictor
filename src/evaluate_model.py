@@ -29,19 +29,19 @@ def evaluate_model(rates, FORECAST_PERIOD, ARIMA_models, **kwargs):
         # INR GBP training and predictions
         predictions_INR = ARIMAForecasting(rates.INR[0:len(rates.INR) - FORECAST_PERIOD], FORECAST_PERIOD,
                                            ARIMA_models['P'][i], ARIMA_models['D'][i], ARIMA_models['Q'][i])
-        MAPE_INR.append(sum(abs(predictions_INR - rates.INR[len(rates.INR) - FORECAST_PERIOD:len(rates.INR)])) / \
+        MAPE_INR.append(sum(abs(predictions_INR - rates.INR[len(rates.INR) - FORECAST_PERIOD:len(rates.INR)]))*100 / \
                             sum(rates.INR[len(rates.INR) - FORECAST_PERIOD:len(rates.INR)]))
 
         # EUR GBP training and predictions
         predictions_EUR = ARIMAForecasting(rates.EUR[0:len(rates.EUR) - FORECAST_PERIOD], FORECAST_PERIOD,
                                            ARIMA_models['P'][i], ARIMA_models['D'][i], ARIMA_models['Q'][i])
-        MAPE_EUR.append(sum(abs(predictions_EUR - rates.EUR[len(rates.EUR) - FORECAST_PERIOD:len(rates.EUR)])) / \
+        MAPE_EUR.append(sum(abs(predictions_EUR - rates.EUR[len(rates.EUR) - FORECAST_PERIOD:len(rates.EUR)]))*100 / \
                         sum(rates.EUR[len(rates.EUR) - FORECAST_PERIOD:len(rates.EUR)]))
 
         # GBP training and predictions
         predictions_GBP = ARIMAForecasting(rates.GBP[0:len(rates.GBP) - FORECAST_PERIOD], FORECAST_PERIOD,
                                            ARIMA_models['P'][i], ARIMA_models['D'][i], ARIMA_models['Q'][i])
-        MAPE_GBP.append(sum(abs(predictions_GBP - rates.GBP[len(rates.GBP) - FORECAST_PERIOD:len(rates.GBP)])) / \
+        MAPE_GBP.append(sum(abs(predictions_GBP - rates.GBP[len(rates.GBP) - FORECAST_PERIOD:len(rates.GBP)]))*100 / \
                         sum(rates.GBP[len(rates.GBP) - FORECAST_PERIOD:len(rates.GBP)]))
 
     #Append the MAPE values to the different models
