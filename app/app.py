@@ -13,7 +13,7 @@ app.config.from_pyfile('../config/flask_config.py')
 # Define LOGGING_CONFIG in config.py - path to config file for setting
 # up the logger (e.g. config/logging/local.conf)
 #logging.config.fileConfig(app.config["LOGGING_CONFIG"])
-logger = logging.getLogger("penny-lane")
+logger = logging.getLogger("run-xchangeratepred")
 
 # Initialize the database
 db = SQLAlchemy(app)

@@ -11,7 +11,7 @@ SQLALCHEMY_DATABASE_URI = "{}://{}:{}@{}:{}/{}".\
 SQLALCHEMY_TRACK_MODIFICATIONS = True
 
 # Flask config
-HOST = "0.0.0.0" #18.223.248.26
+HOST = "18.188.190.59" #"0.0.0.0"
 PORT = 3000
 APP_NAME = "penny-lane"
 
