@@ -43,14 +43,12 @@
 ├── config                            <- Directory for yaml configuration files for model training, scoring, etc
 │   ├── logging/                      <- Configuration files for python loggers
 │
-├── data                              <- Folder that contains data used or generated. Only the external/ and sample/ subdirectories are tracked by git. 
+├── data                              <- Folder that contains data used or generated. 
 │   ├── archive/                      <- Place to put archive data is no longer usabled. Not synced with git. 
 │   ├── raw/                          <- Raw data from external data sources, will be synced with git
 │
 ├── src                               <- Source data for the project 
-│   ├── archive/                      <- No longer current scripts.
 │   ├── helpers/                      <- Helper scripts used in main src files 
-│   ├── sql/                          <- SQL source code
 │   ├── create_dataset.py             <- Script for creating a (temporary) MySQL database 
 │   ├── acquire_data.py               <- Script for ingesting data from different sources 
 │   ├── load_data.py                  <- Script for fetching different data objects required at various points in the workflow.
@@ -58,12 +56,12 @@
 │   ├── score_model.py                <- Script for scoring new predictions using a trained model.
 │   ├── evaluate_model.py             <- Script for evaluating model performance 
 │
-├── test                              <- Files necessary for running model tests (see documentation below) 
+├── test                              <- Files necessary for running model tests
 │
 ├── run.py                            <- Simplifies the execution of one or more of the src scripts 
-├── app.py                            <- Flask wrapper for running the model 
 ├── config.py                         <- Configuration file for redirecting to other appropriate config files
 ├── requirements.txt                  <- Python package dependencies 
+├── Makefile                          <- Makefile for the entire pipeline and tests
 ```
 This project structure was partially influenced by the [Cookiecutter Data Science project](https://drivendata.github.io/cookiecutter-data-science/).
 
@@ -154,11 +152,11 @@ A. If the RDS database was used for data setup, set your MYSQL environment varia
 	export MYSQL_HOST = "<your rds mysql host url>" 
 	export MYSQL_PORT = "<your rds mysql port>"
 
-B. Alternatively, if a local SQLITE database was used for data setup, open config/flask_config.py and:
+B. If instead of RDS, a local SQLITE database was used for data setup, open config/flask_config.py and:
 
-    a. Comment out this: SQLALCHEMY_DATABASE_URI = "{}://{}:{}@{}:{}/{}".format(conn_type, user, password, host, port, DATABASE_NAME)
+    a. Comment out this line: SQLALCHEMY_DATABASE_URI = "{}://{}:{}@{}:{}/{}".format(conn_type, user, password, host, port, DATABASE_NAME)
     
-    b. Uncomment out this: #SQLALCHEMY_DATABASE_URI = 'sqlite:///{}'.format(DB_PATH)
+    b. Uncomment out this line: #SQLALCHEMY_DATABASE_URI = 'sqlite:///{}'.format(DB_PATH)
 
 C. Go to the project directory and run:
 
