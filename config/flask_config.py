@@ -13,7 +13,7 @@ SQLALCHEMY_TRACK_MODIFICATIONS = True
 # Flask config
 HOST = "0.0.0.0" #"18.188.190.59"
 PORT = 3000
-APP_NAME = "penny-lane"
+APP_NAME = "xchangeratepred"
 
 DEBUG = True
 LOGGING_CONFIG = "config/logging/local.conf"

@@ -18,7 +18,7 @@ import argparse
 
 import logging.config
 logging.config.fileConfig("config/logging/local.conf")
-logger = logging.getLogger("run-xchangeratepred")
+logger = logging.getLogger("xchangeratepred")
 
 from src.create_dataset import create_db
 from src.acquire_data import acquire_rates

@@ -10,6 +10,9 @@
     + [With `conda`](#with-conda)
   * [2. Initialize the database](#2-initialize-the-database)
   * [3. Acquire/ingest the source data](#3-acquireingest-the-source-data)
+  * [4. Train and Score](#4-train-and-score)
+  * [5. Run the webapp](#5-run-the-webapp)
+- [Makefile and Testing](#makefile-and-testing)
 
 <!-- tocstop -->
 
@@ -45,14 +48,6 @@
 │   ├── archive/                      <- Place to put archive data is no longer usabled. Not synced with git. 
 │   ├── raw/                          <- Raw data from external data sources, will be synced with git
 │
-├── docs                              <- A default Sphinx project; see sphinx-doc.org for details.
-│
-├── notebooks
-│   ├── develop                       <- Current notebooks being used in development.
-│   ├── deliver                       <- Notebooks shared with others. 
-│   ├── archive                       <- Develop notebooks no longer being used.
-│   ├── template.ipynb                <- Template notebook for analysis with useful imports and helper functions. 
-│
 ├── src                               <- Source data for the project 
 │   ├── archive/                      <- No longer current scripts.
 │   ├── helpers/                      <- Helper scripts used in main src files 
@@ -65,10 +60,10 @@
 │   ├── evaluate_model.py             <- Script for evaluating model performance 
 │
 ├── test                              <- Files necessary for running model tests (see documentation below) 
-
+│
 ├── run.py                            <- Simplifies the execution of one or more of the src scripts 
 ├── app.py                            <- Flask wrapper for running the model 
-├── config.py                         <- Configuration file for Flask app
+├── config.py                         <- Configuration file for redirecting to other appropriate config files
 ├── requirements.txt                  <- Python package dependencies 
 ```
 This project structure was partially influenced by the [Cookiecutter Data Science project](https://drivendata.github.io/cookiecutter-data-science/).
@@ -110,9 +105,14 @@ B. To create a mysql database in RDS instance:
     
     b. The host, port and dbname will need to be changed appropriately to the credentials corresponding the RDS instance where you want the mysql database created.
     
-    c. Go to the project directory and run:
+    c. Set your RDS MYSQL username and password:
+    
+    export MYSQL_USER = "<your rds mysql username>"
+    export MYSQL_PASSWORD = "<your rds mysql password>"
+    
+    d. Go to the project directory and run:
 
-    `python run.py create_db --u your_rds_username --p your_rds_password`
+    `python run.py create_db`
 
 C. (Optional) To create a SQLITE database locally (instead of RDS):
 
@@ -134,4 +134,38 @@ B. Change the S3_LOCATION and S3_FILE_NAME to the bucket and file name where you
 
 C. Go to the project directory and run:
 
-    `python run.py acquire`
+`python run.py acquire`
+
+### 4. Train and Score
+A. To train the model, run:
+
+`python run.py train`
+
+
+B. To generate the predictions, run:
+
+`python run.py score`
+
+
+### 5. Run the webapp
+A. Set your MYSQL environment variables by running the following commands in the terminal:
+
+	export MYSQL_USER = "<your rds mysql username>"
+	export MYSQL_PASSWORD = "<your rds mysql password>"
+	export MYSQL_HOST = "<your rds mysql host url>" 
+	export MYSQL_PORT = "<your rds mysql port>"
+
+B. Go to the project directory and run:
+
+`python run.py app`
+
+B. Get the IPv4 Public IP found on the EC2 console. Add ":3000" to this IP address to view the page in the web browser.
+
+## Makefile and Testing
+Running the following will sequentially run all the above listed steps (except running the webapp) AND also execute the automated tests:
+ 
+`make all`
+
+If you only want to run the tests, run:
+
+`make tests`
