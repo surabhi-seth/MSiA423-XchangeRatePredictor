@@ -128,7 +128,7 @@ C. Go to the project directory and run:
 ### 4. Train
 A. The parameters for training are present in config/model_config.yml. You do not need to change them, unless necessary.
 
-B. The To train the model, run:
+B. To train the model, run:
 
 `python run.py train`
 
