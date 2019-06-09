@@ -11,7 +11,7 @@ DATABASE_NAME = 'msia423'
 #    format(conn_type, user, password, host, port, DATABASE_NAME)
 
 # Use the following SQLALCHEMY_DATABASE_URI for sqlite
-PROJECT_HOME = path.dirname(path.abspath(__file__))
+PROJECT_HOME = path.dirname(path.dirname(path.abspath(__file__)))
 DB_PATH = path.join(PROJECT_HOME, 'data/XchangeRatePredictor.db')
 SQLALCHEMY_DATABASE_URI = 'sqlite:///{}'.format(DB_PATH)
 

@@ -10,4 +10,3 @@ boto3==1.9.145
 scipy==1.2.1
 pymysql
 pandas
-awscli
