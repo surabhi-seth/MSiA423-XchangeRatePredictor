@@ -6,7 +6,7 @@
 - [Repo structure](#repo-structure)
 - [Running the application](#running-the-application)
   * [1. Set up environment](#1-set-up-environment)
-    + [With `virtualenv` and `pip`](#with-virtualenv-and-pip)
+    + [With `virtualenv`](#with-virtualenv)
     + [With `conda`](#with-conda)
   * [2. Initialize the database](#2-initialize-the-database)
   * [3. Acquire/ingest the source data](#3-acquireingest-the-source-data)
@@ -159,7 +159,7 @@ B. Go to the project directory and run:
 
 `python run.py app`
 
-B. Get the IPv4 Public IP found on the EC2 console. Add ":3000" to this IP address to view the page in the web browser.
+C. Get the IPv4 Public IP found on the EC2 console. Add ":3000" to this IP address to view the page in the web browser.
 
 ## Makefile and Testing
 Running the following will sequentially run all the above listed steps (except running the webapp) AND also execute the automated tests:

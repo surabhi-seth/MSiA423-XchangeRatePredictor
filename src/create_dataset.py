@@ -51,6 +51,7 @@ def create_db(args):
     """
     engine = get_engine()
     try:
+        Base.metadata.drop_all(engine)
         Base.metadata.create_all(engine)
         logger.info("Database created with tables")
     except Exception as e:
