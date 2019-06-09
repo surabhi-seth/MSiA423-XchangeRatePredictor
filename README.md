@@ -44,14 +44,8 @@
 ├── data                              <- Folder that contains data used or generated. Only the external/ and sample/ subdirectories are tracked by git. 
 │   ├── archive/                      <- Place to put archive data is no longer usabled. Not synced with git. 
 │   ├── raw/                          <- Raw data from external data sources, will be synced with git
-│   ├── sample/                       <- Sample data used for code development and testing, will be synced with git
 │
 ├── docs                              <- A default Sphinx project; see sphinx-doc.org for details.
-│
-├── figures                           <- Generated graphics and figures to be used in reporting.
-│
-├── models                            <- Trained model objects (TMOs), model predictions, and/or model summaries
-│   ├── archive                       <- No longer current models. This directory is included in the .gitignore and is not tracked by git
 │
 ├── notebooks
 │   ├── develop                       <- Current notebooks being used in development.
@@ -65,10 +59,9 @@
 │   ├── sql/                          <- SQL source code
 │   ├── create_dataset.py             <- Script for creating a (temporary) MySQL database 
 │   ├── acquire_data.py               <- Script for ingesting data from different sources 
-│   ├── generate_features.py          <- Script for cleaning and transforming data and generating features used for use in training and scoring.
+│   ├── load_data.py                  <- Script for fetching different data objects required at various points in the workflow.
 │   ├── train_model.py                <- Script for training machine learning model(s)
 │   ├── score_model.py                <- Script for scoring new predictions using a trained model.
-│   ├── postprocess.py                <- Script for postprocessing predictions and model results
 │   ├── evaluate_model.py             <- Script for evaluating model performance 
 │
 ├── test                              <- Files necessary for running model tests (see documentation below) 
