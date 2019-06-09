@@ -6,12 +6,11 @@
 - [Repo structure](#repo-structure)
 - [Running the application](#running-the-application)
   * [1. Set up environment](#1-set-up-environment)
-    + [With `virtualenv`](#with-virtualenv)
-    + [With `conda`](#with-conda)
   * [2. Initialize the database](#2-initialize-the-database)
   * [3. Acquire/ingest the source data](#3-acquireingest-the-source-data)
-  * [4. Train and Score](#4-train-and-score)
-  * [5. Run the webapp](#5-run-the-webapp)
+  * [4. Train](#4-train)
+  * [5. Score](#5-score)
+  * [6. Run the webapp](#6-run-the-webapp)
 - [Makefile and Testing](#makefile-and-testing)
 
 <!-- tocstop -->
@@ -72,9 +71,8 @@ This project structure was partially influenced by the [Cookiecutter Data Scienc
 ## Running the application 
 ### 1. Set up environment 
 
-The `requirements.txt` file contains the packages required to run the model code. An environment can be set up in two ways. 
+The `requirements.txt` file contains the packages required to run the model code. An environment can be set up using virtualenv. 
 
-#### With `virtualenv`
 
 ```bash
 pip install virtualenv
@@ -86,14 +84,7 @@ source pennylane/bin/activate
 pip install -r requirements.txt
 
 ```
-#### With `conda`
 
-```bash
-conda create -n pennylane python=3.7
-conda activate pennylane
-pip install -r requirements.txt
-
-```
 
 ### 2. Initialize the database 
 
@@ -136,18 +127,23 @@ C. Go to the project directory and run:
 
 `python run.py acquire`
 
-### 4. Train and Score
-A. To train the model, run:
+### 4. Train
+A. The parameters for training are present in config/model_config.yml. You do not need to change them, unless necessary.
+
+B. The To train the model, run:
 
 `python run.py train`
 
+
+### 5. Score
+A. The parameters for scoring are present in config/model_config.yml. You do not need to change them, unless necessary.
 
 B. To generate the predictions, run:
 
 `python run.py score`
 
 
-### 5. Run the webapp
+### 6. Run the webapp
 A. Set your MYSQL environment variables by running the following commands in the terminal:
 
 	export MYSQL_USER = "<your rds mysql username>"
@@ -162,7 +158,7 @@ B. Go to the project directory and run:
 C. Get the IPv4 Public IP found on the EC2 console. Add ":3000" to this IP address to view the page in the web browser.
 
 ## Makefile and Testing
-Running the following will sequentially run all the above listed steps (except running the webapp) AND also execute the automated tests:
+Provided that all the necessary steps for setup of RDS/S3 bucket (as described above) have been undertaken, running the following will sequentially run the pipeline (except running the webapp) AND also execute the automated tests:
  
 `make all`
 
