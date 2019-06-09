@@ -134,6 +134,8 @@ B. The To train the model, run:
 
 `python run.py train`
 
+C. The parameters for the most optimal ARIMA models, based on training will be stored, in the databse.
+
 
 ### 5. Score
 A. The parameters for scoring are present in config/model_config.yml. You do not need to change them, unless necessary.
@@ -142,20 +144,27 @@ B. To generate the predictions, run:
 
 `python run.py score`
 
+C. The predictions will be stored in the database.
 
 ### 6. Run the webapp
-A. Set your MYSQL environment variables by running the following commands in the terminal:
+A. If the RDS database was used for data setup, set your MYSQL environment variables by running the following commands in the terminal:
 
 	export MYSQL_USER = "<your rds mysql username>"
 	export MYSQL_PASSWORD = "<your rds mysql password>"
 	export MYSQL_HOST = "<your rds mysql host url>" 
 	export MYSQL_PORT = "<your rds mysql port>"
 
-B. Go to the project directory and run:
+B. Alternatively, if a local SQLITE database was used for data setup, open config/flask_config.py and:
+
+    a. Comment out this: SQLALCHEMY_DATABASE_URI = "{}://{}:{}@{}:{}/{}".format(conn_type, user, password, host, port, DATABASE_NAME)
+    
+    b. Uncomment out this: #SQLALCHEMY_DATABASE_URI = 'sqlite:///{}'.format(DB_PATH)
+
+C. Go to the project directory and run:
 
 `python run.py app`
 
-C. Get the IPv4 Public IP found on the EC2 console. Add ":3000" to this IP address to view the page in the web browser.
+D. Get the IPv4 Public IP found on the EC2 console. Add ":3000" to this IP address to view the page in the web browser.
 
 ## Makefile and Testing
 Provided that all the necessary steps for setup of RDS/S3 bucket (as described above) have been undertaken, running the following will sequentially run the pipeline (except running the webapp) AND also execute the automated tests:

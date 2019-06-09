@@ -4,8 +4,8 @@ from os import path
 PROJECT_HOME = path.dirname(path.abspath(__file__))
 
 # DBCONFIG specifies the yaml file with settings for creation of RDS database
-DBCONFIG = None
-#DBCONFIG = path.join(PROJECT_HOME, 'config/dbconfig.yml')
+#DBCONFIG = None
+DBCONFIG = path.join(PROJECT_HOME, 'config/dbconfig.yml')
 MODEL_CONFIG = path.join(PROJECT_HOME, 'config/model_config.yml')
 
 
