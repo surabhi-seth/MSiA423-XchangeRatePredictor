@@ -86,10 +86,10 @@ def create_Predictions(engine, df):
 
         session.bulk_insert_mappings(Predictions, df.to_dict(orient="records"))
         session.commit()
+        logger.info("Predictions stored in the database")
     except Exception as e:
         logger.error(e)
         sys.exit(1)
     finally:
         session.close()
-        logger.info("Predictions stored in the database")
         return
