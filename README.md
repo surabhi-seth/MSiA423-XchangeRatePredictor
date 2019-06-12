@@ -38,10 +38,13 @@
 │   ├── static/                       <- CSS, JS files that remain static 
 │   ├── templates/                    <- HTML (or other code) that is templated and changes based on a set of inputs
 │   ├── models.py                     <- Creates the data model for the database connected to the Flask app 
-│   ├── __init__.py                   <- Initializes the Flask app and database connection
+│   ├── app.py                   <- Initializes the Flask app and database connection
 │
 ├── config                            <- Directory for yaml configuration files for model training, scoring, etc
 │   ├── logging/                      <- Configuration files for python loggers
+│   ├── dbconfig.yml                  <- YAML config containing RDS connection properties
+│   ├── flask_config.py               <- Configurations for the Flask app
+│   ├── model_config.yml              <- YAML config for various steps in the pipeline
 │
 ├── data                              <- Folder that contains data used or generated. 
 │   ├── archive/                      <- Place to put archive data is no longer usabled. Not synced with git. 
@@ -56,7 +59,8 @@
 │   ├── score_model.py                <- Script for scoring new predictions using a trained model.
 │   ├── evaluate_model.py             <- Script for evaluating model performance 
 │
-├── test                              <- Files necessary for running model tests
+├── test                              <- Files necessary for running tests
+│   ├── test_helpers.py               <- Contains all tests
 │
 ├── run.py                            <- Simplifies the execution of one or more of the src scripts 
 ├── config.py                         <- Configuration file for redirecting to other appropriate config files
