@@ -156,7 +156,7 @@ A. If the RDS database was used for data setup, set your MYSQL environment varia
 	export MYSQL_HOST = "<your rds mysql host url>" 
 	export MYSQL_PORT = "<your rds mysql port>"
 
-B. If instead of RDS, a local SQLITE database was used for data setup, open config/flask_config.py and:
+B. (Optional) If instead of RDS, a local SQLITE database was used for data setup, open config/flask_config.py and:
 
     a. Comment out this line: SQLALCHEMY_DATABASE_URI = "{}://{}:{}@{}:{}/{}".format(conn_type, user, password, host, port, DATABASE_NAME)
     
