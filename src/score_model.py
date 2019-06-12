@@ -13,6 +13,11 @@ logger = logging.getLogger(__name__)
 
 
 def date_by_adding_business_days(from_date, add_days):
+    """
+    :param from_date: Date from which the next business date is to be found
+    :param add_days: Number of business days that need to be added to from_date
+    :return: The next business day after adding add_days to from_date (sat and sun are considered holidays)
+    """
     business_days_to_add = add_days
     current_date = from_date
     while business_days_to_add > 0:
@@ -25,11 +30,17 @@ def date_by_adding_business_days(from_date, add_days):
 
 
 def generate_predictions(rates, ARIMA_params, FORECAST_PERIOD, **kwargs):
-    """ Generate predictions from the rate data and ARIMA parameters for the forecast period"""
+    """
+    Generate predictions from the rates data and ARIMA parameters for the forecast period
+    :param rates: The rates time series for INR, GBP and EUR
+    :param ARIMA_params: The ARIMA parameters to be used for INR, GBP and EUR respectively
+    :param FORECAST_PERIOD: Number of days for which the predictions are to be made
+    :return:
+    """
 
     predictions_df = pd.DataFrame(columns=['CURRENCY', 'PRED_DATE', 'PRED_RATE'])
     currencies = ['EUR', 'GBP', 'INR']
-    #now = datetime.now()
+
     now = datetime.strptime(rates['DATE'].iloc[-1], '%Y-%m-%d')
 
     for curr in currencies:
@@ -48,7 +59,14 @@ def generate_predictions(rates, ARIMA_params, FORECAST_PERIOD, **kwargs):
 
 
 def score_model(args):
-    """ Load the best model parameters and fetch the latest rate data to generate predictions"""
+    """
+    Orchestrates the following functions:
+    1. Construct the API URL from the configs set in the yaml
+    2. Invoke the api and get latest exchange rates
+    3. Load ARIMA parameters for best models
+    4. Generate predictions
+    5. Store predictions in the database
+    """
     try:
         with open(config.MODEL_CONFIG, "r") as f:
             model_config = yaml.load(f, Loader=yaml.FullLoader)

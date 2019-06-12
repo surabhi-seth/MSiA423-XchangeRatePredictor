@@ -17,7 +17,11 @@ logger = logging.getLogger(__name__)
 
 
 def find_best_model(models):
-    """ Determine the best model from the MAPE values and store its parameters in the databse a"""
+    """
+    Determine the best model from the MAPE values for INR, GBP and EUR
+    :param models: Dataframe containing ARIMA model parameters with corresponding MAPE values
+    :return: Dataframe with the best INR, GBP and EUR models
+    """
 
     best_models = pd.DataFrame(columns=['CURRENCY', 'P', 'D', 'Q'])
 
@@ -43,6 +47,11 @@ def find_best_model(models):
 
 
 def store_best_models(df):
+    """
+    Stores the ARIMA parameters passed in the input df in the database
+    :param df: ARIMA parameters corresponding to the best models
+    :return: None
+    """
     engine = get_engine()
     create_ARIMA_Params(engine, df)
     logger.info("ARIMA Model parameters loaded in the db")
@@ -52,8 +61,9 @@ def train_model(args):
     """
     Orchestrates the following steps:
     1. Fetch the source data from S3 bucket
-    2. Evaluate the best ARIMA model for INR, GBP and EUR
-    3. Store the model params for the best model
+    2. Evaluate the MAPE values for various ARIMA models for INR, GBP and EUR
+    3. Find the best models with the lowest MAPE value for INR, GBP and EUR respectively
+    4. Insert the p,d,q values for the best ARIMA models
     """
 
     try:
@@ -63,6 +73,7 @@ def train_model(args):
         logger.error(e)
         sys.exit(1)
 
+    # 1. Fetch the source data from S3 bucket
     load_config = model_config["train_model"]
     local_results_file = load_config["DOWNLOAD_LOCATION"]
     load_raw_source(local_results_file)
@@ -79,11 +90,13 @@ def train_model(args):
     rates = pd.DataFrame(data=inputs)
     rates = rates.sort_values(by=['DATE'], ascending=True).reset_index(drop=True)
 
+    # 2. Evaluate the MAPE values for various ARIMA models for INR, GBP and EUR
     models = evaluate_model(rates, **load_config)
 
+    # 3. Find the best models with the lowest MAPE value for INR, GBP and EUR respectively
     best_models = find_best_model(models)
 
-    # Insert the p,d,q values for the best ARIMA model
+    # 4. Insert the p,d,q values for the best ARIMA models
     store_best_models(best_models)
 
     return

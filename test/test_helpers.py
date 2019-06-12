@@ -78,8 +78,7 @@ def test_find_best_model():
 
 
 
-def test_date_by_adding_business_days():
-
+def test_date_by_adding_business_days_1():
     # Find 2 days from a Thursday - Result should be the next Monday
     input_date = datetime.strptime('2019-06-06', '%Y-%m-%d')
     actual_result = date_by_adding_business_days(input_date, 2).strftime("%Y-%m-%d")
@@ -87,6 +86,8 @@ def test_date_by_adding_business_days():
     expected_output = '2019-06-10'
     assert actual_result == expected_output
 
+
+def test_date_by_adding_business_days_2():
     # Find 2 days from a Saturday - Result should be the next Tuesday
     input_date = datetime.strptime('2019-06-08', '%Y-%m-%d')
     actual_result = date_by_adding_business_days(input_date, 2).strftime("%Y-%m-%d")

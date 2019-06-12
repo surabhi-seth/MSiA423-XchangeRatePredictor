@@ -19,7 +19,7 @@ DB_PATH = path.join(PROJECT_HOME, 'data/XchangeRatePredictor.db')
 SQLALCHEMY_TRACK_MODIFICATIONS = True
 
 # Flask config
-HOST = "0.0.0.0" #"18.188.190.59"
+HOST = "0.0.0.0"
 PORT = 3000
 APP_NAME = "xchangeratepred"
 

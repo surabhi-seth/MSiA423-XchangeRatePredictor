@@ -43,7 +43,7 @@ def read_records(file_location):
 
 
 def load_raw_source(local_results_file):
-    """ Fetch the source data stored in S3 bucket """
+    """ Fetch the source data stored in S3 bucket and dump it in the local_results_file """
     try:
         with open(config.MODEL_CONFIG, "r") as f:
             model_config = yaml.load(f, Loader=yaml.FullLoader)

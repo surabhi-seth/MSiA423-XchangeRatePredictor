@@ -10,9 +10,6 @@ app = Flask(__name__)
 # Configure flask app from config.py
 app.config.from_pyfile('../config/flask_config.py')
 
-# Define LOGGING_CONFIG in config.py - path to config file for setting
-# up the logger (e.g. config/logging/local.conf)
-#logging.config.fileConfig(app.config["LOGGING_CONFIG"])
 logger = logging.getLogger("xchangeratepred")
 
 # Initialize the database
@@ -21,9 +18,8 @@ db = SQLAlchemy(app)
 
 @app.route('/')
 def index():
-    """Main view that lists songs in the database.
-    Create view into index page that uses data queried from Track database and
-    inserts it into the msiapp/templates/index.html template.
+    """Main view that lists the rate predictions.
+    Create view into index page that uses data queried from rates database.
     Returns: rendered html template
     """
 

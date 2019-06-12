@@ -60,7 +60,12 @@ def create_db(args):
 
 
 def create_ARIMA_Params(engine, df):
-    """ Stores ARIMA_Params in the database """
+    """
+    Stores ARIMA_Params in the database
+    :param engine: DB engine
+    :param df: Dataframe containing ARIMA parameters
+    :return: None
+    """
 
     try:
         session = get_session(engine)
@@ -78,7 +83,12 @@ def create_ARIMA_Params(engine, df):
 
 
 def create_Predictions(engine, df):
-    """ Stores Predictions in the database """
+    """
+    Stores Predictions in the database
+    :param engine: DB engine
+    :param df: Dataframe containing ARIMA parameters
+    :return: None
+    """
 
     try:
         session = get_session(engine)

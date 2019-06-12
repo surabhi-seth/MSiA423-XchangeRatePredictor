@@ -1,5 +1,4 @@
 import os
-import datetime
 import sqlalchemy
 import yaml
 import sys
@@ -10,78 +9,42 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+def get_engine():
+    '''Wrapper function for calling create_connection with the right inputs to create an engine for an RDS or sqlite database'''
+    dbconfig = config.DBCONFIG
+    try:
+        if dbconfig is not None:
+            engine = create_connection(dbconfig=config.DBCONFIG,
+                                       user_env=os.environ.get("MYSQL_USER"),
+                                       password_env=os.environ.get("MYSQL_PASSWORD"))
+            logger.info("Accessing RDS database")
+        else:
+            engine = create_connection(engine_string=config.SQLALCHEMY_DATABASE_URI)
+            logger.info("Accessing sqlite database")
+    except Exception as e:
+        logger.error(e)
+        sys.exit(1)
 
-class Timer:
-    """Times the code within the with statement and logs the elapsed time when it closes.
-           Args:
-               function_name(string): Name of function being timed
-               logger (obj:`logging.logger`): Logger to have elapsed time logged to
-   """
-    def __init__(self, function_name, logger):
-        self.logger = logger
-        self.function = function_name
-
-    def __enter__(self):
-        self.start = datetime.datetime.now()
-
-        return self
-
-    def __exit__(self, *args):
-        self.end = datetime.datetime.now()
-        self.interval = self.end - self.start
-        self.logger.info("%s took %0.2f seconds", self.function, self.interval.total_seconds())
-
-
-def format_sql(sql, replace_sqlvar=None, replace_var=None, python=True):
-    """Formats SQL query string for Python interpretation and with variables replaced.
-    Args:
-        sql (string): String with SQL query
-        replace_sqlvar (dict, optional): If given, replaces variables of the format ${var:dict-key} with the value
-            in the dictionary corresponding to that dict-key.
-        replace_var (dict, optional): If given, replaces variables of the format {dict-key} with the value
-            in the dictionary corresponding to that dict-key.
-        python: If True, formats the query to be passed into a Python SQL querying function by replacing "%" with
-            "%%" since % is a special character in Python
-    Returns: string of SQL query with variables replaced and optionally formatted for Python
-    """
-    if replace_sqlvar is not None:
-        for var in replace_sqlvar:
-            sql = sql.replace("${var:%s}" % var, replace_sqlvar[var])
-
-    if replace_var is not None:
-        sql = sql.format(**replace_var)
-
-    if python:
-        sql = sql.replace("%", "%%")
-
-    return sql
-
-
-def load_sql(path_to_sql, load_comments=False, replace_sqlvar=None, replace_var=None, python=True):
-    sql = ""
-    with open(path_to_sql, "r") as f:
-        for line in f.readlines():
-            if not load_comments and not line.startswith("--"):
-                sql += line
-
-    sql = format_sql(replace_sqlvar=replace_sqlvar, replace_var=replace_var, python=python)
-
-    return sql
-
-
-def ifin(param, dictionary, alt=None):
-
-    assert type(dictionary) == dict
-    if param in dictionary:
-        return dictionary[param]
-    else:
-        return alt
+    return engine
 
 
 def create_connection(host='127.0.0.1', database="", sqltype="mysql+pymysql", port=3308,
                       user_env="amazonRDS_user", password_env="amazonRDS_pw",
                       username=None, password=None, dbconfig=None, engine_string=None):
-
+    """
+    Creates engine for an RDS or local sqlite database
+    :param host: Host
+    :param database: Database name
+    :param sqltype: SQltype
+    :param port: Port
+    :param user_env: RDS user name
+    :param password_env: RDS password
+    :param username: Non RDS username
+    :param password: Non RDS password
+    :param dbconfig: If passed, RDS connection will be created
+    :param engine_string: If a sqlite connection is to be created, SQLALCHEMY_DATABASE_URI should be passed
+    :return: The db connection
+    """
     if engine_string is None:
         if dbconfig is not None:
             with open(dbconfig, "r") as f:
@@ -105,6 +68,7 @@ def create_connection(host='127.0.0.1', database="", sqltype="mysql+pymysql", po
 
     return conn
 
+
 def get_session(engine=None, engine_string=None):
     """
     Args:
@@ -125,26 +89,12 @@ def get_session(engine=None, engine_string=None):
     return session
 
 
-def get_engine():
-    '''Creates engine for an RDS or local sqlite database'''
-    dbconfig = config.DBCONFIG
-    try:
-        if dbconfig is not None:
-            engine = create_connection(dbconfig=config.DBCONFIG,
-                                       user_env=os.environ.get("MYSQL_USER"),
-                                       password_env=os.environ.get("MYSQL_PASSWORD"))
-            logger.info("Accessing RDS database")
-        else:
-            engine = create_connection(engine_string=config.SQLALCHEMY_DATABASE_URI)
-            logger.info("Accessing sqlite database")
-    except Exception as e:
-        logger.error(e)
-        sys.exit(1)
-
-    return engine
-
-
 def invoke_api(api_url):
+    """
+    Calls the API from the url passed as input and returns the response
+    :param api_url: The api url
+    :return: The API response
+    """
     try:
         response = requests.get(api_url)
         if response.status_code == 200:
@@ -157,11 +107,11 @@ def invoke_api(api_url):
         sys.exit(1)
     return result
 
-def fillin_kwargs(keywords, kwargs):
-    keywords = [keywords] if type(keywords) != list else keywords
 
-    logger.debug("Original keywords in kwargs: %s", ",".join(kwargs.keys()))
-    for keyword in keywords:
-        if keyword not in kwargs:
-            kwargs[keyword] = {}
-    return kwargs
+def ifin(param, dictionary, alt=None):
+
+    assert type(dictionary) == dict
+    if param in dictionary:
+        return dictionary[param]
+    else:
+        return alt
