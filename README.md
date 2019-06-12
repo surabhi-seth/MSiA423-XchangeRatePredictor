@@ -38,7 +38,7 @@
 │   ├── static/                       <- CSS, JS files that remain static 
 │   ├── templates/                    <- HTML (or other code) that is templated and changes based on a set of inputs
 │   ├── models.py                     <- Creates the data model for the database connected to the Flask app 
-│   ├── app.py                   <- Initializes the Flask app and database connection
+│   ├── app.py                        <- Initializes the Flask app and database connection
 │
 ├── config                            <- Directory for yaml configuration files for model training, scoring, etc
 │   ├── logging/                      <- Configuration files for python loggers
