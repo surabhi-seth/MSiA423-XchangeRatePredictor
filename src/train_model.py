@@ -25,23 +25,27 @@ def find_best_model(models):
 
     best_models = pd.DataFrame(columns=['CURRENCY', 'P', 'D', 'Q'])
 
-    # Find the best model for INR, GBP and EUR
-    best_INR_model = models.loc[models['MAPE_INR'].idxmin()]
-    best_models = best_models.\
-        append({'CURRENCY': 'INR', 'P': best_INR_model.P, 'D': best_INR_model.D, 'Q': best_INR_model.Q,
-                'MAPE': best_INR_model.MAPE_INR}, ignore_index=True)
+    try:
+        # Find the best model for INR, GBP and EUR
+        best_INR_model = models.loc[models['MAPE_INR'].idxmin()]
+        best_models = best_models.\
+            append({'CURRENCY': 'INR', 'P': best_INR_model.P, 'D': best_INR_model.D, 'Q': best_INR_model.Q,
+                    'MAPE': best_INR_model.MAPE_INR}, ignore_index=True)
 
-    best_GBP_model = models.loc[models['MAPE_GBP'].idxmin()]
-    best_models = best_models. \
-        append({'CURRENCY': 'GBP', 'P': best_GBP_model.P, 'D': best_GBP_model.D, 'Q': best_GBP_model.Q,
-                'MAPE': best_GBP_model.MAPE_GBP}, ignore_index=True)
+        best_GBP_model = models.loc[models['MAPE_GBP'].idxmin()]
+        best_models = best_models. \
+            append({'CURRENCY': 'GBP', 'P': best_GBP_model.P, 'D': best_GBP_model.D, 'Q': best_GBP_model.Q,
+                    'MAPE': best_GBP_model.MAPE_GBP}, ignore_index=True)
 
-    best_EUR_model = models.loc[models['MAPE_EUR'].idxmin()]
-    best_models = best_models. \
-        append({'CURRENCY': 'EUR', 'P': best_EUR_model.P, 'D': best_EUR_model.D, 'Q': best_EUR_model.Q,
-               'MAPE': best_EUR_model.MAPE_EUR}, ignore_index=True)
+        best_EUR_model = models.loc[models['MAPE_EUR'].idxmin()]
+        best_models = best_models. \
+            append({'CURRENCY': 'EUR', 'P': best_EUR_model.P, 'D': best_EUR_model.D, 'Q': best_EUR_model.Q,
+                   'MAPE': best_EUR_model.MAPE_EUR}, ignore_index=True)
 
-    best_models = best_models.sort_values(by=['CURRENCY'], ascending=True).reset_index(drop=True)
+        best_models = best_models.sort_values(by=['CURRENCY'], ascending=True).reset_index(drop=True)
+    except Exception as e:
+        logger.error(e)
+        sys.exit(1)
 
     return best_models
 
@@ -69,23 +73,28 @@ def train_model(args):
     try:
         with open(config.MODEL_CONFIG, "r") as f:
             model_config = yaml.load(f, Loader=yaml.FullLoader)
+
+        load_config = model_config["train_model"]
+        local_results_file = load_config["DOWNLOAD_LOCATION"]
     except Exception as e:
         logger.error(e)
         sys.exit(1)
 
     # 1. Fetch the source data from S3 bucket
-    load_config = model_config["train_model"]
-    local_results_file = load_config["DOWNLOAD_LOCATION"]
     load_raw_source(local_results_file)
     data = read_records(local_results_file)
 
-    dates_list = list(data['rates'].keys())
-    inputs = {
-            'DATE': [date for date in dates_list],
-            'EUR': [data['rates'][date]['EUR'] for date in dates_list],
-            'INR': [data['rates'][date]['INR'] for date in dates_list],
-            'GBP': [data['rates'][date]['GBP'] for date in dates_list]
-            }
+    try:
+        dates_list = list(data['rates'].keys())
+        inputs = {
+                'DATE': [date for date in dates_list],
+                'EUR': [data['rates'][date]['EUR'] for date in dates_list],
+                'INR': [data['rates'][date]['INR'] for date in dates_list],
+                'GBP': [data['rates'][date]['GBP'] for date in dates_list]
+                }
+    except KeyError:
+        logger.error("One or more required fields are not present in the input JSON")
+        sys.exit(1)
 
     rates = pd.DataFrame(data=inputs)
     rates = rates.sort_values(by=['DATE'], ascending=True).reset_index(drop=True)

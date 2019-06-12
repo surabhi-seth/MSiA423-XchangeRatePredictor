@@ -20,12 +20,17 @@ def date_by_adding_business_days(from_date, add_days):
     """
     business_days_to_add = add_days
     current_date = from_date
-    while business_days_to_add > 0:
-        current_date += timedelta(days=1)
-        weekday = current_date.weekday()
-        if weekday >= 5: # sunday = 6
-            continue
-        business_days_to_add -= 1
+    try:
+        while business_days_to_add > 0:
+            current_date += timedelta(days=1)
+            weekday = current_date.weekday()
+            if weekday >= 5: # sunday = 6
+                continue
+            business_days_to_add -= 1
+    except TypeError:
+        logger.error("Non date type input received")
+        sys.exit(1)
+
     return current_date
 
 
@@ -41,19 +46,23 @@ def generate_predictions(rates, ARIMA_params, FORECAST_PERIOD, **kwargs):
     predictions_df = pd.DataFrame(columns=['CURRENCY', 'PRED_DATE', 'PRED_RATE'])
     currencies = ['EUR', 'GBP', 'INR']
 
-    now = datetime.strptime(rates['DATE'].iloc[-1], '%Y-%m-%d')
+    try:
+        now = datetime.strptime(rates['DATE'].iloc[-1], '%Y-%m-%d')
 
-    for curr in currencies:
-        predictions = ARIMAForecasting(rates[curr], FORECAST_PERIOD,
-                                       ARIMA_params.loc[ARIMA_params['CURRENCY'] == curr, 'P'].values[0],
-                                       ARIMA_params.loc[ARIMA_params['CURRENCY'] == curr, 'D'].values[0],
-                                       ARIMA_params.loc[ARIMA_params['CURRENCY'] == curr, 'Q'].values[0])
+        for curr in currencies:
+            predictions = ARIMAForecasting(rates[curr], FORECAST_PERIOD,
+                                           ARIMA_params.loc[ARIMA_params['CURRENCY'] == curr, 'P'].values[0],
+                                           ARIMA_params.loc[ARIMA_params['CURRENCY'] == curr, 'D'].values[0],
+                                           ARIMA_params.loc[ARIMA_params['CURRENCY'] == curr, 'Q'].values[0])
 
-        for i in range(FORECAST_PERIOD):
-            next_dt = date_by_adding_business_days(now, (i+1))
-            next_dt = next_dt.strftime("%Y-%m-%d")
-            predictions_df = predictions_df.\
-                append({'CURRENCY': curr, 'PRED_DATE': next_dt, 'PRED_RATE': predictions[i]}, ignore_index=True)
+            for i in range(FORECAST_PERIOD):
+                next_dt = date_by_adding_business_days(now, (i+1))
+                next_dt = next_dt.strftime("%Y-%m-%d")
+                predictions_df = predictions_df.\
+                    append({'CURRENCY': curr, 'PRED_DATE': next_dt, 'PRED_RATE': predictions[i]}, ignore_index=True)
+    except Exception as e:
+        logger.error(e)
+        sys.exit(1)
 
     return predictions_df
 
