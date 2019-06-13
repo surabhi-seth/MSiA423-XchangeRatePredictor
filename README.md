@@ -173,7 +173,7 @@ Provided that all the necessary steps for setup of RDS/S3 bucket (as described a
  
 `make all`
 
-If you only want to run the tests, run:
+If you only want to execute the tests, run:
 
 `make tests`
 
