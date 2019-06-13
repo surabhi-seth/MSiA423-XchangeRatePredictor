@@ -176,3 +176,7 @@ Provided that all the necessary steps for setup of RDS/S3 bucket (as described a
 If you only want to run the tests, run:
 
 `make tests`
+
+The tests can also be run by visiting the "test" sub-directory and from there running:
+
+`pytest`
